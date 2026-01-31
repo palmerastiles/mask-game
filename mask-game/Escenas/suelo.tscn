@@ -22,10 +22,12 @@ texture = ExtResource("1_586bq")
 
 [node name="jugador" parent="." unique_id=1676021811 instance=ExtResource("2_ujst0")]
 position = Vector2(78, 492)
+Ira_Desbloqueada = false
+Burla_Desbloqueada = false
+Dios_Desbloqueada = false
 
 [node name="CharacterBody2D" parent="." unique_id=1751731663 instance=ExtResource("3_8guyl")]
 position = Vector2(831, 512)
 
 [node name="objeto_mascara" parent="." unique_id=1223132703 instance=ExtResource("4_8guyl")]
 position = Vector2(1340, 540)
-mascara_a_desbloquear = 2
