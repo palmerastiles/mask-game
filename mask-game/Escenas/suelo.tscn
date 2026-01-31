@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bh75w4yi3nwny" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
 [ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="4_6pcy2"]
-[ext_resource type="PackedScene" uid="uid://crlbgf5bfq4uc" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
+[ext_resource type="PackedScene" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
@@ -15,7 +15,7 @@
 position = Vector2(606, 639)
 shape = SubResource("WorldBoundaryShape2D_hy3li")
 
-[node name="CharacterBody2D" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
+[node name="Jugador" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
 position = Vector2(314, 279)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]

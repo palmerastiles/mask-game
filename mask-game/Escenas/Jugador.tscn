@@ -17,6 +17,9 @@
 [ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
 [ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/pj prota salto/sprite_prota_salto3.png" id="16_31k2h"]
 [ext_resource type="PackedScene" uid="uid://bpsrn4wc8548e" path="res://addons/health_bar_2d/health_bar_2d.tscn" id="17_1340j"]
+[ext_resource type="Texture2D" uid="uid://d0oo8ivey6eh8" path="res://Assets/efectos/mask 2.png" id="18_ldqfe"]
+[ext_resource type="Texture2D" uid="uid://ce0jmbk2nhaf4" path="res://Assets/efectos/mask 3.png" id="19_5d76g"]
+[ext_resource type="Texture2D" uid="uid://dvnr6et74hq4e" path="res://Assets/efectos/pj prota mask 1.png" id="20_sb2or"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
 resource_local_to_scene = true
@@ -111,6 +114,8 @@ script = ExtResource("1_pfvk3")
 Ira_Desbloqueada = true
 Burla_Desbloqueada = true
 Dios_Desbloqueada = true
+TIEMPO_MAX_USO = 31.36
+COOLDOWN_DURACION = 0.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
 position = Vector2(0.99999905, -15)
@@ -120,19 +125,50 @@ animation = &"Correr"
 speed_scale = 0.7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
+visible = false
 position = Vector2(2, -3)
 shape = SubResource("CapsuleShape2D_8g85c")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1557022389]
+visible = false
 position = Vector2(87, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1466632862]
+visible = false
 position = Vector2(-30, 12)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
+visible = false
 
 [node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
+visible = false
+offset_left = -496.0
+offset_top = -248.00003
+offset_right = -204.0
+offset_bottom = -199.00003
 scale = Vector2(5, 5)
+tint_progress = Color(0.6001417, 0, 0.23248968, 1)
+
+[node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
+visible = false
+position = Vector2(-13.437494, -17.562506)
+scale = Vector2(0.1648137, 0.1648137)
+texture = ExtResource("18_ldqfe")
+metadata/_edit_group_ = true
+
+[node name="Mask3" type="Sprite2D" parent="." unique_id=1419972385]
+visible = false
+position = Vector2(37.311436, -33)
+scale = Vector2(0.20515724, 0.1723599)
+texture = ExtResource("19_5d76g")
+metadata/_edit_group_ = true
+
+[node name="PjProtaMask1" type="Sprite2D" parent="." unique_id=1314610756]
+visible = false
+position = Vector2(0.3749979, -19.625)
+scale = Vector2(0.18118992, 0.18118992)
+texture = ExtResource("20_sb2or")
+metadata/_edit_group_ = true

@@ -116,23 +116,38 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 			Animacion.modulate = Color(1, 1, 1)  # Color normal
 			mult_daño_recibido = 1.5 # +50% daño recibido
 			print("MODO SACRIFICIO: Daño recibido x1.5")
+			$PjProtaMask1.visible = false
+			$Mask2.visible = false
+			$Mask3.visible = false
 		Estado.Ira:
 			Animacion.modulate = Color(1, 0.2, 0.2)  # Rojo
 			Daño_actual = Daño_base * 2.0 # Doble de daño
 			print("MODO IRA: Daño de ataque x2")
+			$PjProtaMask1.visible = true
+			$Mask2.visible = false
+			$Mask3.visible = false
 		Estado.Burla:
-			Animacion.modulate = Color(0.2, 1, 0.2)  # Verde
+			Animacion.modulate = Color(0.2, 1, 0.2)
+			$PjProtaMask1.visible = false
+			$Mask2.visible = true
+			$Mask3.visible = false  # Verde
 			SPEED = 600.0 # Doble de velocidad
 			Daño_actual = Daño_base * 0.5 # 50% menos de daño
 			print("MODO BURLA: Veloz pero débil")
 			
 		Estado.Dios:
-			Animacion.modulate = Color(1, 1, 0.2)  # Amarillo
+			Animacion.modulate = Color(1, 1, 0.2)
+			$PjProtaMask1.visible = false
+			$Mask2.visible = false
+			$Mask3.visible = true  # Amarillo
 			mult_daño_recibido = 0.5 # -50% daño recibido
 			SPEED = 150.0 # -50% Speed
 			self.scale = Vector2(1.3, 1.3) # Se hace mas grande
 			print("MODO DIOS: Tanque lento")
-
+			
+	
+	
+	
 #FUNCION A LLAMAR AL RECIBIR DAÑO (MAÑO)
 func recibir_daño(cantidad: int):
 	var daño_final = cantidad * mult_daño_recibido
@@ -195,6 +210,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED
 		
 		Animacion.flip_h = direction < 0
+		$PjProtaMask1.flip_h = direction < 0
+		$Mask2.flip_h = direction < 0
+		$Mask3.flip_h = direction < 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
@@ -322,7 +340,7 @@ func procesar_tiempos(delta: float):
 			print("¡Tiempo agotado! Volviendo a Sacrificio.")
 			Equipar_Mascara(Estado.Sacrificio) #Forzar sacrificio
 
-
+	
 # Función para desbloquear máscaras desde otros lugares del juego
 func Desbloquear_Ira():
 	Ira_Desbloqueada = true
