@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://ce4k64jvaeuna"]
 
-[ext_resource type="PackedScene" uid="uid://bkuy73irhmuq2" path="res://Jugador.tscn" id="1_qdjju"]
+[ext_resource type="PackedScene" path="res://Jugador.tscn" id="1_qdjju"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
+[ext_resource type="PackedScene" uid="uid://cihj6m1l3vx7i" path="res://enemigo_renacido.tscn" id="3_8n0vj"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
@@ -14,9 +15,12 @@ position = Vector2(606, 639)
 shape = SubResource("WorldBoundaryShape2D_hy3li")
 
 [node name="CharacterBody2D" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
-position = Vector2(521, 505)
+position = Vector2(314, 279)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
 position = Vector2(463, 693)
 scale = Vector2(13.15625, 1)
 texture = ExtResource("2_xq07r")
+
+[node name="enemigo_renacido" parent="." unique_id=232099185 instance=ExtResource("3_8n0vj")]
+position = Vector2(-196, 280)
