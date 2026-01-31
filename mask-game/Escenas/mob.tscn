@@ -1,15 +1,19 @@
 [gd_scene format=3 uid="uid://btcivpgnfaqdn"]
 
+[ext_resource type="Script" uid="uid://dgeif5a86vkkt" path="res://Codigo/mob.gd" id="1_pxqvm"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_nokgg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_51nst"]
+size = Vector2(123, 118)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pxqvm"]
-radius = 34.0147
+radius = 301.02658
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1751731663]
+script = ExtResource("1_pxqvm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
+position = Vector2(-2.5, 0)
 shape = SubResource("RectangleShape2D_51nst")
 
 [node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" unique_id=1641163312]
@@ -20,3 +24,8 @@ texture = ExtResource("2_nokgg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
 shape = SubResource("CircleShape2D_pxqvm")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523397148]
+texture = ExtResource("2_nokgg")
+
+[node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]

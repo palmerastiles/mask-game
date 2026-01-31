@@ -1,14 +1,12 @@
 [gd_scene format=3 uid="uid://5ut68nktkjq4"]
 
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="1_avllj"]
-[ext_resource type="Script" uid="uid://10tabtjxqawq" path="res://Codigo/enemigo_renacido.gd" id="2_em2y4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_818r3"]
 
 [node name="NPC_Renacido" type="Node2D" unique_id=1205307948]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=161062398]
-script = ExtResource("2_em2y4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=271054485]
 shape = SubResource("RectangleShape2D_818r3")
@@ -17,5 +15,3 @@ shape = SubResource("RectangleShape2D_818r3")
 position = Vector2(-2.0861626e-07, -4.7683716e-07)
 scale = Vector2(0.15625001, 0.1640625)
 texture = ExtResource("1_avllj")
-
-[node name="DirectionTimer" type="Timer" parent="CharacterBody2D" unique_id=1493302940]
