@@ -1,14 +1,111 @@
 [gd_scene format=3 uid="uid://b1iogr26pkp7j"]
 
 [ext_resource type="Script" uid="uid://d4g8phbfrx7uo" path="res://Codigo/jugador.gd" id="1_pfvk3"]
-[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_ucnt4"]
+[ext_resource type="Texture2D" uid="uid://be2c44bjnqehw" path="res://Assets/pj prota iddle/sprite_prota_iddle0.png" id="2_8g85c"]
+[ext_resource type="Texture2D" uid="uid://dl2arjirxy736" path="res://Assets/pj prota caminata/sprite_prota_caminata0.png" id="2_1340j"]
+[ext_resource type="Texture2D" uid="uid://dx5crnrny3pfh" path="res://Assets/pj prota caminata/sprite_prota_caminata1.png" id="3_g735c"]
+[ext_resource type="Texture2D" uid="uid://d2bhgb5f688hn" path="res://Assets/pj prota iddle/sprite_prota_iddle1.png" id="3_muoba"]
+[ext_resource type="Texture2D" uid="uid://cxbwccrbhp2rx" path="res://Assets/pj prota caminata/sprite_prota_caminata2.png" id="4_3le5i"]
+[ext_resource type="Texture2D" uid="uid://bywch02kr41si" path="res://Assets/pj prota iddle/sprite_prota_iddle2.png" id="4_fwv5a"]
+[ext_resource type="Texture2D" uid="uid://bmq68xaq2v5w3" path="res://Assets/pj prota caminata/sprite_prota_caminata3.png" id="5_ldqfe"]
+[ext_resource type="Texture2D" uid="uid://bx7e8lokhyq1k" path="res://Assets/pj prota correr/sprite_prota_correr0.png" id="6_5d76g"]
+[ext_resource type="Texture2D" uid="uid://cic6txlm48cqb" path="res://Assets/pj prota correr/sprite_prota_correr1.png" id="7_sb2or"]
+[ext_resource type="Texture2D" uid="uid://dxtpjtbpc6d8j" path="res://Assets/pj prota correr/sprite_prota_correr2.png" id="8_v8mjx"]
+[ext_resource type="Texture2D" uid="uid://7x7pkx563628" path="res://Assets/pj prota correr/sprite_prota_correr3.png" id="9_2c0fp"]
+[ext_resource type="Texture2D" uid="uid://127o75wgjcov" path="res://Assets/pj prota salto/sprite_prota_salto0.png" id="13_q4s4l"]
+[ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/pj prota salto/sprite_prota_salto1.png" id="14_361ip"]
+[ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
+[ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/pj prota salto/sprite_prota_salto3.png" id="16_31k2h"]
+[ext_resource type="Texture2D" uid="uid://cck678g4017b3" path="res://Assets/pj prota salto/sprite_prota_salto4.png" id="17_jjne1"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_w2bje"]
-size = Vector2(117, 119)
+[sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
+resource_local_to_scene = true
+resource_name = "Indio"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_1340j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_g735c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3le5i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ldqfe")
+}],
+"loop": true,
+"name": &"Caminata",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_5d76g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_sb2or")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_v8mjx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_2c0fp")
+}],
+"loop": true,
+"name": &"Correr",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_8g85c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_muoba")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_fwv5a")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_q4s4l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_361ip")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_c06m1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_31k2h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_jjne1")
+}],
+"loop": true,
+"name": &"Salto",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8g85c"]
+radius = 30.0
+height = 129.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43k7d"]
 radius = 25.5
 height = 117.0
+
+[sub_resource type="Animation" id="Animation_x5nqs"]
+resource_name = "Idle"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ny14v"]
+_data = {
+&"Idle": SubResource("Animation_x5nqs")
+}
 
 [node name="jugador" type="CharacterBody2D" unique_id=1676021811 groups=["player"]]
 script = ExtResource("1_pfvk3")
@@ -16,20 +113,28 @@ Ira_Desbloqueada = true
 Burla_Desbloqueada = true
 Dios_Desbloqueada = true
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
+position = Vector2(0.99999905, -15)
+scale = Vector2(0.17908657, 0.17908657)
+sprite_frames = SubResource("SpriteFrames_btktc")
+animation = &"Salto"
+frame_progress = 0.6512213
+speed_scale = 0.7
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
-position = Vector2(0.5, -0.5)
-shape = SubResource("RectangleShape2D_w2bje")
+position = Vector2(2, -3)
+shape = SubResource("CapsuleShape2D_8g85c")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1557022389]
 position = Vector2(87, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1466632862]
-position = Vector2(1, 14)
+position = Vector2(-30, 12)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1439046118]
-texture = ExtResource("2_ucnt4")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1225552812]
+libraries/ = SubResource("AnimationLibrary_ny14v")

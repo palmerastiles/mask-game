@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-class_name enemigoRenacido
+#class_name enemigoRenacido
 
 # Controla la velocidad base del enemigo
 const VELOCIDAD_NORMAL = 30
@@ -54,11 +54,11 @@ func _physics_process(delta: float) -> void:
 	# Manejar estados
 	match estado_actual:
 		Estado.DEAMBULANDO:
-			movimiento_deambulando(delta)
+			movimiento_deambulando()
 		Estado.PERSEGUIR:
-			perseguir_jugador(delta)
+			perseguir_jugador()
 		Estado.ATACAR:
-			atacar_jugador(delta)
+			atacar_jugador()
 	
 	# Aplicar movimiento
 	move_and_slide()
@@ -66,11 +66,11 @@ func _physics_process(delta: float) -> void:
 	# Actualizar dirección del sprite
 	actualizar_direccion_sprite()
 
-func movimiento_deambulando(delta):
+func movimiento_deambulando():
 	# Movimiento aleatorio
 	velocity.x = direccion.x * VELOCIDAD_NORMAL
 
-func perseguir_jugador(delta):
+func perseguir_jugador():
 	if jugador_ref and not muerto:
 		# Calcular dirección hacia el jugador
 		var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
@@ -86,7 +86,7 @@ func perseguir_jugador(delta):
 		if distancia < 50:  # Distancia de ataque
 			estado_actual = Estado.ATACAR
 
-func atacar_jugador(delta):
+func atacar_jugador():
 	# Detener movimiento para atacar
 	velocity.x = 0
 	

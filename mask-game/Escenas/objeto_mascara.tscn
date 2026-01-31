@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://crlbgf5bfq4uc"]
+
+[ext_resource type="Script" uid="uid://7rcfdx8imdn8" path="res://Codigo/objeto_mascara.gd" id="1_icp2x"]
+[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xnlae"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b356w"]
+size = Vector2(26, 80)
+
+[node name="objeto_mascara" type="Area2D" unique_id=1223132703]
+script = ExtResource("1_icp2x")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1476688407]
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.203125, 0.6328125)
+texture = ExtResource("2_xnlae")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=642170101]
+shape = SubResource("RectangleShape2D_b356w")
