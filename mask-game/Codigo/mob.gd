@@ -8,8 +8,9 @@ const VELOCIDAD_PERSECUCION = 80
 const DISTANCIA_DETECCION = 200  # Píxeles a los que detecta al jugador
 
 # Variables para controlar el hp del enemigo
-var vida = 10
+
 var vidaMaxima = 10
+var vida = vidaMaxima
 var vidaMinima = 0
 
 # Estados del enemigo
@@ -58,7 +59,7 @@ func _physics_process(delta: float) -> void:
 		Estado.PERSEGUIR:
 			perseguir_jugador()
 		Estado.ATACAR:
-			atacar_jugador()
+			realizar_ataque()
 	
 	# Aplicar movimiento
 	move_and_slide()
@@ -83,28 +84,22 @@ func perseguir_jugador():
 		
 		# Verificar si está lo suficientemente cerca para atacar
 		var distancia = global_position.distance_to(jugador_ref.global_position)
-		if distancia < 50:  # Distancia de ataque
-			estado_actual = Estado.ATACAR
+		#Aqui habia if de distancia
+		estado_actual = Estado.ATACAR
 
-func atacar_jugador():
+
+
+func realizar_ataque():
 	# Detener movimiento para atacar
 	velocity.x = 0
 	
-	# Lógica de ataque aquí
-	# Por ejemplo, activar animación de ataque
-	realizar_ataque()
-
-func realizar_ataque():
 	# Aquí implementas la lógica de ataque
 	if jugador_ref:
 		print("Atacando al jugador!")
 		# Dañar al jugador si está en rango
 		var distancia = global_position.distance_to(jugador_ref.global_position)
-		if distancia < 250:
-			# Llamar a función de daño en el jugador
-			# jugador_ref.recibir_daño(daño)
-			pass
-	
+		#Aqui habia un if de distancia
+		jugador_ref.recibir_daño(daño)
 	# Después de atacar, volver a perseguir
 	estado_actual = Estado.PERSEGUIR
 
@@ -178,7 +173,7 @@ func choose_float(array):
 	return array.front()
 
 
-func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
 	if body.is_in_group("player"):
 		print("TETOQUE")
 		body.recibir_daño(daño)
