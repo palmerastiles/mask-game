@@ -176,3 +176,9 @@ func choose(array):
 func choose_float(array):
 	array.shuffle()
 	return array.front()
+
+
+func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		print("TETOQUE")
+		body.recibir_daño(daño)

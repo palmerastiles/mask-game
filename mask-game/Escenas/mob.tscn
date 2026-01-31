@@ -47,3 +47,5 @@ shape = SubResource("RectangleShape2D_rgo7p")
 [node name="AttackCooldown" type="Timer" parent="." unique_id=1923167955]
 wait_time = 0.706
 one_shot = true
+
+[connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]

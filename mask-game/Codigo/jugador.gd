@@ -140,7 +140,7 @@ func recibir_daño(cantidad: int):
 	
 	print("Recibiste ", daño_final, " de daño. Vida restante: ", Vida_Actual)
 	
-	# Efecto extra caótico para Sacrificio:
+	# Efecto Sacrificio:
 	if Actual == Estado.Sacrificio:
 		# Si te pegan en Sacrificio, reduces cooldown de las demás 2 segundos
 		for m in cooldowns:
