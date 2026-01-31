@@ -107,6 +107,9 @@ height = 117.0
 
 [node name="jugador" type="CharacterBody2D" unique_id=1676021811 groups=["player"]]
 script = ExtResource("1_pfvk3")
+Ira_Desbloqueada = true
+Burla_Desbloqueada = true
+Dios_Desbloqueada = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
 position = Vector2(0.99999905, -15)

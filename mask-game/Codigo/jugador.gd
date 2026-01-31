@@ -205,7 +205,6 @@ func _physics_process(delta: float) -> void:
 	manejar_animaciones_suavizado()
 		
 	move_and_slide()
-
 func manejar_animaciones_suavizado():
 	var en_suelo = is_on_floor()
 	var velocidad_y = velocity.y
@@ -218,17 +217,93 @@ func manejar_animaciones_suavizado():
 		elif velocidad_y > 50:  # Cayendo rápidamente
 			if Animacion.animation != "Caida":
 				Animacion.play("Caida")
-		else:  # En el aire pero con poca velocidad vertical
-			if Animacion.animation != "Caida":
-				Animacion.play("Caida")
 	else:
-		if abs(velocity.x) > 300:
-			if Animacion.animation != "Correr":
-				Animacion.play("Correr")
+		if abs(velocity.x) > 0:  # Si hay movimiento horizontal
+			# Verificar si está usando Burla y tiene velocidad 600
+			if Actual == Estado.Burla and SPEED == 600:
+				if Animacion.animation != "Correr":
+					Animacion.play("Correr")
+					
+				else:
+					# Si no existe animación "Correr", usar "Caminata" más rápida
+					if Animacion.animation != "Correr":
+						Animacion.play("Correr")
+					  # Aumentar velocidad de animación
+			else:
+				# Para otras máscaras o cuando no es Burla
+				if Animacion.animation != "Caminata":
+					Animacion.play("Caminata")
+				Animacion.speed_scale = 1.0  # Velocidad normal de animación
 		else:
+			# Sin movimiento
 			if Animacion.animation != "Idle":
 				Animacion.play("Idle")
+			Animacion.speed_scale = 1.0
 
+# Versión alternativa más simple:
+func manejar_animaciones_simple():
+	var en_suelo = is_on_floor()
+	var velocidad_y = velocity.y
+	
+	if not en_suelo:
+		if velocidad_y < 0:
+			Animacion.play("Salto")
+		else:
+			Animacion.play("Caida")
+		return
+	
+	# En el suelo
+	if abs(velocity.x) > 0:
+		# Con Burla y velocidad 600, usar animación "Correr"
+		if Actual == Estado.Burla and SPEED == 600:
+			if Animacion.has_animation("Correr"):
+				Animacion.play("Correr")
+			else:
+				Animacion.play("Caminata")
+				Animacion.speed_scale = 1.5  # Animación más rápida
+		else:
+			Animacion.play("Caminata")
+			Animacion.speed_scale = 1.0
+	else:
+		Animacion.play("Idle")
+		Animacion.speed_scale = 1.0
+
+# Versión con mejor manejo de transiciones:
+func manejar_animaciones_mejorado():
+	var en_suelo = is_on_floor()
+	var velocidad_y = velocity.y
+	var movimiento_horizontal = abs(velocity.x) > 10
+	
+	# Manejar animaciones en el aire
+	if not en_suelo:
+		if velocidad_y < 0:
+			Animacion.play("Salto")
+		else:
+			Animacion.play("Caida")
+		return
+	
+	# Manejar animaciones en el suelo
+	if movimiento_horizontal:
+		# Verificar si está corriendo (Burla con velocidad alta)
+		var esta_corriendo = (Actual == Estado.Burla and SPEED >= 600)
+		
+		if esta_corriendo:
+			# Priorizar animación "Correr"
+			if Animacion.has_animation("Correr"):
+				Animacion.play("Correr")
+				# Ajustar velocidad de animación según la velocidad real
+				Animacion.speed_scale = clamp(abs(velocity.x) / 600.0, 1.0, 1.5)
+			else:
+				# Fallback a "Caminata" rápida
+				Animacion.play("Caminata")
+				Animacion.speed_scale = 1.5
+		else:
+			# Caminata normal
+			Animacion.play("Caminata")
+			Animacion.speed_scale = 1.0
+	else:
+		Animacion.play("Idle")
+		Animacion.speed_scale = 1.0
 
 #Funcion para tiempos de mascaras
 func procesar_tiempos(delta: float):
