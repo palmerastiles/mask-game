@@ -25,6 +25,7 @@ func _physics_process(delta):
 
 
 func _on_detector_de_jugador_body_entered(body: Node2D) -> void:
+	print(\"Detecté algo:\", body.name)
 	if body.is_in_group(\"player\"):
 		player = body
 		chasing = true
