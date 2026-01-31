@@ -59,13 +59,13 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 	# Aquí puedes añadir efectos específicos para cada máscara
 	match Mascara:
 		Estado.Sacrificio:
-			$Sprite2D.modulate = Color(1, 1, 1)  # Color normal
+			$AnimatedSprite2D.modulate = Color(1, 1, 1)  # Color normal
 		Estado.Ira:
-			$Sprite2D.modulate = Color(1, 0.2, 0.2)  # Rojo
+			$AnimatedSprite2D.modulate = Color(1, 0.2, 0.2)  # Rojo
 		Estado.Burla:
-			$Sprite2D.modulate = Color(0.2, 1, 0.2)  # Verde
+			$AnimatedSprite2D.modulate = Color(0.2, 1, 0.2)  # Verde
 		Estado.Dios:
-			$Sprite2D.modulate = Color(1, 1, 0.2)  # Amarillo
+			$AnimatedSprite2D.modulate = Color(1, 1, 0.2)  # Amarillo
 
 func Update_Mascara_Desbloqueada():
 	Desbloqueada = [Estado.Sacrificio]  # Siempre empieza con Sacrificio
@@ -92,6 +92,7 @@ func _physics_process(delta: float) -> void:
 	# Salto
 	if Input.is_action_just_pressed("Salto") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		
 
 	# Movimiento horizontal
 	var direction := Input.get_axis("Izquierda", "Derecha")
@@ -99,7 +100,15 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-
+		$AnimatedSprite2D.play("Idle") 
+		
+	if Input.is_action_just_pressed("Izquierda"):
+		$AnimatedSprite2D.play("Caminata") 
+		$AnimatedSprite2D.flip_h = true
+		
+	elif Input.is_action_just_pressed("Derecha"):
+		$AnimatedSprite2D.play("Caminata") 
+		$AnimatedSprite2D.flip_h = false
 	move_and_slide()
 
 # Función para desbloquear máscaras desde otros lugares del juego
