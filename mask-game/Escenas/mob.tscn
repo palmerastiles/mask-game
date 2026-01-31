@@ -107,7 +107,6 @@ func perseguir_jugador():
 		direccion.x = sign(direccion_hacia_jugador.x)
 		
 		# Verificar si está lo suficientemente cerca para atacar
-		var distancia = global_position.distance_to(jugador_ref.global_position)
 		#Aqui habia if de distancia
 		estado_actual = Estado.ATACAR
 
@@ -121,14 +120,13 @@ func realizar_ataque():
 	if jugador_ref:
 		print(\"Atacando al jugador!\")
 		# Dañar al jugador si está en rango
-		var distancia = global_position.distance_to(jugador_ref.global_position)
 		#Aqui habia un if de distancia
 		jugador_ref.recibir_daño(daño)
 	# Después de atacar, volver a perseguir
 	estado_actual = Estado.PERSEGUIR
 
-
-
+func _on_player_detected(body):
+	
 
 func _on_player_lost(body):
 	if body == jugador_ref:
@@ -180,7 +178,6 @@ func morir():
 	velocity = Vector2.ZERO
 	set_collision_layer_value(1, false)  # Desactivar colisión
 	set_collision_mask_value(1, false)
-	
 	# Animación de muerte
 	print(\"Enemigo muerto\")
 	# queue_free() después de animación si es necesario
@@ -194,11 +191,14 @@ func choose_float(array):
 	return array.front()
 
 
-func _on_player_detected(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
-	if body.is_in_group(\"player\") and not muerto:
-		jugador_ref = body
-		estado_actual = Estado.PERSEGUIR
+func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
+	if body.is_in_group(\"player\"):
 		print(\"TETOQUE\")
+		body.recibir_daño(daño)
+
+
+func _on_player_detection_zone_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wkxbj"]
@@ -285,7 +285,6 @@ animation = &"correr"
 shape = SubResource("CapsuleShape2D_3c6bj")
 
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
 shape = SubResource("CircleShape2D_pxqvm")
@@ -309,4 +308,5 @@ shape = SubResource("CapsuleShape2D_k5pfw")
 wait_time = 0.706
 one_shot = true
 
+[connection signal="body_exited" from="PlayerDetectionZone" to="." method="_on_player_detection_zone_body_exited"]
 [connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]
