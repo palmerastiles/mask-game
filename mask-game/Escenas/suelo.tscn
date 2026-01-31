@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://6qja6jmqhdrh"]
 
 [ext_resource type="PackedScene" uid="uid://bh75w4yi3nwny" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
-[ext_resource type="PackedScene" uid="uid://bpsrn4wc8548e" path="res://addons/health_bar_2d/health_bar_2d.tscn" id="2_63u0f"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
 [ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="4_6pcy2"]
 [ext_resource type="PackedScene" uid="uid://crlbgf5bfq4uc" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
@@ -18,13 +17,6 @@ shape = SubResource("WorldBoundaryShape2D_hy3li")
 
 [node name="CharacterBody2D" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
 position = Vector2(314, 279)
-
-[node name="HealthBar2D" parent="CharacterBody2D" unique_id=314492777 instance=ExtResource("2_63u0f")]
-offset_left = 1.0
-offset_top = -3.0
-offset_right = 13.0
-offset_bottom = -2.0
-scale = Vector2(6, 6)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
 position = Vector2(463, 693)

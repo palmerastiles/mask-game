@@ -6,7 +6,7 @@ enum Estado {
 	Burla,
 	Dios 
 }
-signal health_changed #Señal para el addon de barra 2d
+signal health_changed #Señal para el addon de barra de vida
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]
 var Rotacion = []

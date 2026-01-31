@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/pj prota salto/sprite_prota_salto1.png" id="14_361ip"]
 [ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
 [ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/pj prota salto/sprite_prota_salto3.png" id="16_31k2h"]
+[ext_resource type="PackedScene" uid="uid://bpsrn4wc8548e" path="res://addons/health_bar_2d/health_bar_2d.tscn" id="17_1340j"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
 resource_local_to_scene = true
@@ -132,3 +133,6 @@ shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
+
+[node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
+scale = Vector2(5, 5)

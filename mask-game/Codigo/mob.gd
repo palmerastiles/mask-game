@@ -19,7 +19,7 @@ var estado_actual = Estado.DEAMBULANDO
 # Variables de daño y ataque
 var muerto: bool = false
 var recibeDaño: bool = false
-var daño = 3
+var daño = 10
 var realizandoDaño1: bool = false
 var puede_atacar: bool = true
 
