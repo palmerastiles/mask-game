@@ -28,9 +28,20 @@ var realizandoDaño1: bool = false
 var direccion: Vector2
 const gravity = 900
 var fuerzaRetroceso = 200
-#var jugadorMuerto: true #Posiblemente ni se use, es para que el enemigo siga moviendose en lo que el jugador revive
+var deambulando: bool = true #Controla si el enemigo sigue vivo y moviendose
 
-
+func _process(delta: float) -> void:
+	if !is_on_floor():
+		velocity.y += gravity * delta
+		velocity.x = 0
+	movimiento(delta)
+	
+func movimiento(delta):
+	if !muerto and !velocidadPersiguiendo:
+		velocity += direccion * VELOCIDAD * delta
+		deambulando = true
+	else:
+		velocity.x = 0
 
 func cambio_direccion_por_tiempo():
 	$DirectionTimer.wait_time = choose([0.5, 1.0, 1.5])
