@@ -6,8 +6,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmq2w"]
 size = Vector2(114, 84)
 
+<<<<<<< Updated upstream:mask-game/enemigo_renacido.tscn
 [node name="enemigoRenacido" type="CharacterBody2D" unique_id=486773317]
 script = ExtResource("1_hmq2w")
+=======
+[sub_resource type="CircleShape2D" id="CircleShape2D_82frh"]
+radius = 247.07286
+>>>>>>> Stashed changes:mask-game/Escenas/enemigo.tscn
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=118045067]
 
@@ -19,4 +24,17 @@ texture = ExtResource("1_ylt4w")
 position = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_hmq2w")
 
+<<<<<<< Updated upstream:mask-game/enemigo_renacido.tscn
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1928837217]
+=======
+[node name="DetectorDeJugador" type="Area2D" parent="." unique_id=1033416184]
+position = Vector2(0, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectorDeJugador" unique_id=724874450]
+shape = SubResource("CircleShape2D_82frh")
+
+[node name="DirectionTimer" type="Timer" parent="." unique_id=252160656]
+
+[connection signal="body_entered" from="DetectorDeJugador" to="." method="_on_detector_de_jugador_body_entered"]
+[connection signal="body_exited" from="DetectorDeJugador" to="." method="_on_detector_de_jugador_body_exited"]
+>>>>>>> Stashed changes:mask-game/Escenas/enemigo.tscn

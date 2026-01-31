@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="mask game"
-run/main_scene="uid://dsanjyh33aap4"
+config/name="mask game (Copy)"
+run/main_scene="uid://ce4k64jvaeuna"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

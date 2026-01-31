@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dsanjyh33aap4"]
+
+<<<<<<< Updated upstream:mask-game/suelo.tscn
+[ext_resource type="PackedScene" uid="uid://bkuy73irhmuq2" path="res://Jugador.tscn" id="1_qdjju"]
+[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
+[ext_resource type="PackedScene" uid="uid://dtkiv7q7grr21" path="res://mob.tscn" id="3_8n0vj"]
+=======
+[ext_resource type="PackedScene" uid="uid://b1iogr26pkp7j" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
+[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
+[ext_resource type="PackedScene" uid="uid://cihj6m1l3vx7i" path="res://Escenas/enemigo.tscn" id="3_8n0vj"]
+>>>>>>> Stashed changes:mask-game/Escenas/suelo.tscn
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
+
+[node name="suelo" type="Node2D" unique_id=603382769]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=510015800]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2074029504]
+position = Vector2(606, 639)
+shape = SubResource("WorldBoundaryShape2D_hy3li")
+
+[node name="CharacterBody2D" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
+position = Vector2(521, 505)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
+position = Vector2(463, 693)
+scale = Vector2(13.15625, 1)
+texture = ExtResource("2_xq07r")
+
+[node name="Mob" parent="." unique_id=503593829 instance=ExtResource("3_8n0vj")]
