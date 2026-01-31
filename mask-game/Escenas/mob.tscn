@@ -1,48 +1,309 @@
 [gd_scene format=3 uid="uid://btcivpgnfaqdn"]
 
-[ext_resource type="Script" uid="uid://dgeif5a86vkkt" path="res://Codigo/mob.gd" id="1_pxqvm"]
-[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_nokgg"]
+[ext_resource type="Texture2D" uid="uid://calbsxekqgsdo" path="res://Assets/npc ataque lanza/sprite_npc_ataque0.png" id="1_xx0qd"]
+[ext_resource type="Texture2D" uid="uid://jnyx6xf7wcwl" path="res://Assets/npc ataque lanza/sprite_npc_ataque1.png" id="2_v6f7r"]
+[ext_resource type="Texture2D" uid="uid://b75h0nwdwakr5" path="res://Assets/npc ataque lanza/sprite_npc_ataque2.png" id="3_unnbp"]
+[ext_resource type="Texture2D" uid="uid://c841jgi5blu6y" path="res://Assets/npc ataque lanza/sprite_npc_ataque3.png" id="4_vgwtf"]
+[ext_resource type="Texture2D" uid="uid://kjibx7p1vyjr" path="res://Assets/npc ataque lanza/sprite_npc_ataque4.png" id="5_g6esx"]
+[ext_resource type="Texture2D" uid="uid://cyiquqa6xc3to" path="res://Assets/npc caminata/sprite_npc_caminar0.png" id="6_gyfq5"]
+[ext_resource type="Texture2D" uid="uid://cis1tgs18ne14" path="res://Assets/npc caminata/sprite_npc_caminar1.png" id="7_ttsdk"]
+[ext_resource type="Texture2D" uid="uid://byn6x7g30fukv" path="res://Assets/npc caminata/sprite_npc_caminar2.png" id="8_86htk"]
+[ext_resource type="Texture2D" uid="uid://c7q431dfpnoqw" path="res://Assets/npc caminata/sprite_npc_caminar3.png" id="9_lgql4"]
+[ext_resource type="Texture2D" uid="uid://do3vqcj7gn6x8" path="res://Assets/npc correr/sprite_npc_correr0.png" id="10_acft1"]
+[ext_resource type="Texture2D" uid="uid://bsbge6w2kk44s" path="res://Assets/npc correr/sprite_npc_correr1.png" id="11_1f5pg"]
+[ext_resource type="Texture2D" uid="uid://3r80blre8j1r" path="res://Assets/npc correr/sprite_npc_correr2.png" id="12_u0c26"]
+[ext_resource type="Texture2D" uid="uid://bml82liot80l1" path="res://Assets/npc correr/sprite_npc_correr3.png" id="13_kcwd7"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_51nst"]
-size = Vector2(123, 118)
+[sub_resource type="GDScript" id="GDScript_v4v7w"]
+script/source = "extends CharacterBody2D
+
+#class_name enemigoRenacido
+
+# Controla la velocidad base del enemigo
+const VELOCIDAD_NORMAL = 30
+const VELOCIDAD_PERSECUCION = 80
+const DISTANCIA_DETECCION = 200  # Píxeles a los que detecta al jugador
+
+# Variables para controlar el hp del enemigo
+
+var vidaMaxima = 100
+var vida = vidaMaxima
+var vidaMinima = 0
+
+# Estados del enemigo
+enum Estado { DEAMBULANDO, PERSEGUIR, ATACAR, MUERTO }
+var estado_actual = Estado.DEAMBULANDO
+
+# Variables de daño y ataque
+var muerto: bool = false
+var recibeDaño: bool = false
+var daño = 10
+var realizandoDaño1: bool = false
+var puede_atacar: bool = true
+
+# Variables de movimiento
+var direccion: Vector2 = Vector2.RIGHT
+var fuerzaRetroceso = 200
+var jugador_ref = null  # Referencia al jugador
+
+@onready var player_detection_zone = $PlayerDetectionZone  # Necesitarás un Area2D como hijo
+@onready var sprite = $Sprite2D  # Asume que tienes un nodo Sprite2D
+
+func _ready():
+	# Iniciar el timer para cambiar dirección
+	$DirectionTimer.start()
+	$DirectionTimer.wait_time = choose_float([0.5, 1.0, 1.5])
+	
+	# Conectar señales si usas un Area2D para detección
+	if player_detection_zone:
+		player_detection_zone.body_entered.connect(_on_player_detected)
+		player_detection_zone.body_exited.connect(_on_player_lost)
+
+func _physics_process(delta: float) -> void:
+	if muerto:
+		return
+	
+	# Aplicar gravedad
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	else:
+		velocity.y = 0
+	
+	# Manejar estados
+	match estado_actual:
+		Estado.DEAMBULANDO:
+			movimiento_deambulando()
+		Estado.PERSEGUIR:
+			perseguir_jugador()
+		Estado.ATACAR:
+
+			
+
+			#PONER AQUI LA INICIALIZACION DE LA ANIMACION DE ATAQUE
+
+			realizar_ataque()
+	
+	# Aplicar movimiento
+	move_and_slide()
+	
+	# Actualizar dirección del sprite
+	#actualizar_direccion_sprite()
+
+func movimiento_deambulando():
+	# Movimiento aleatorio
+	velocity.x = direccion.x * VELOCIDAD_NORMAL
+	if velocity.x > 1:
+		$AnimatedSprite2D.play(\"caminata\")
+
+func perseguir_jugador():
+	if jugador_ref and not muerto:
+		# Calcular dirección hacia el jugador
+		var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
+		
+		# Mover hacia el jugador
+		velocity.x = direccion_hacia_jugador.x * VELOCIDAD_PERSECUCION
+		
+		# Actualizar dirección para el sprite
+		direccion.x = sign(direccion_hacia_jugador.x)
+		
+		# Verificar si está lo suficientemente cerca para atacar
+		var distancia = global_position.distance_to(jugador_ref.global_position)
+		#Aqui habia if de distancia
+		estado_actual = Estado.ATACAR
+
+
+
+func realizar_ataque():
+	# Detener movimiento para atacar
+	velocity.x = 0
+	
+	# Aquí implementas la lógica de ataque
+	if jugador_ref:
+		print(\"Atacando al jugador!\")
+		# Dañar al jugador si está en rango
+		var distancia = global_position.distance_to(jugador_ref.global_position)
+		#Aqui habia un if de distancia
+		jugador_ref.recibir_daño(daño)
+	# Después de atacar, volver a perseguir
+	estado_actual = Estado.PERSEGUIR
+
+
+
+
+func _on_player_lost(body):
+	if body == jugador_ref:
+		jugador_ref = null
+		estado_actual = Estado.DEAMBULANDO
+		print(\"Jugador perdido\")
+
+func _on_direction_timer_timeout():
+	if estado_actual == Estado.DEAMBULANDO and not muerto:
+		cambio_direccion_aleatoria()
+		$DirectionTimer.wait_time = choose_float([0.5, 1.0, 1.5])
+		$DirectionTimer.start()
+
+func cambio_direccion_aleatoria():
+	# Cambiar dirección aleatoriamente
+	direccion.x = choose([-1, 1])
+	
+	# También puedes agregar pequeñas pausas
+	if randf() < 0.3:  # 30% de probabilidad de detenerse brevemente
+		velocity.x = 0
+	else:
+		velocity.x = direccion.x * VELOCIDAD_NORMAL
+
+func actualizar_direccion_sprite():
+	# Voltear sprite según dirección
+	if direccion.x > 0:
+		sprite.flip_h = false
+	elif direccion.x < 0:
+		sprite.flip_h = true
+
+func recibir_daño(cantidad):
+	if muerto:
+		return
+	
+	vida -= cantidad
+	print(\"Enemigo recibió \", cantidad, \" de daño. Vida restante: \", vida)
+	
+	# Efecto visual de daño
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.1).timeout
+	sprite.modulate = Color.WHITE
+	
+	if vida <= 0:
+		morir()
+
+func morir():
+	muerto = true
+	estado_actual = Estado.MUERTO
+	velocity = Vector2.ZERO
+	set_collision_layer_value(1, false)  # Desactivar colisión
+	set_collision_mask_value(1, false)
+	
+	# Animación de muerte
+	print(\"Enemigo muerto\")
+	# queue_free() después de animación si es necesario
+
+func choose(array):
+	array.shuffle()
+	return array.front()
+
+func choose_float(array):
+	array.shuffle()
+	return array.front()
+
+
+func _on_player_detected(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
+	if body.is_in_group(\"player\") and not muerto:
+		jugador_ref = body
+		estado_actual = Estado.PERSEGUIR
+		print(\"TETOQUE\")
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wkxbj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_xx0qd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_v6f7r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_unnbp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_vgwtf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_g6esx")
+}],
+"loop": true,
+"name": &"ataque",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_gyfq5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ttsdk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_86htk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_lgql4")
+}],
+"loop": true,
+"name": &"caminata",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_acft1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_1f5pg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_u0c26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_kcwd7")
+}],
+"loop": true,
+"name": &"correr",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3c6bj"]
+radius = 32.0
+height = 112.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pxqvm"]
 radius = 301.02658
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pxqvm"]
-size = Vector2(199.5, 52)
+size = Vector2(124.375, 9)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rgo7p"]
-size = Vector2(121, 121)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k5pfw"]
+radius = 36.0
+height = 122.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1751731663]
-script = ExtResource("1_pxqvm")
+script = SubResource("GDScript_v4v7w")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=415006159]
+position = Vector2(2.9802322e-08, -9)
+scale = Vector2(0.14331503, 0.14331503)
+sprite_frames = SubResource("SpriteFrames_wkxbj")
+animation = &"correr"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
-position = Vector2(-2.5, 0)
-shape = SubResource("RectangleShape2D_51nst")
+shape = SubResource("CapsuleShape2D_3c6bj")
 
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
 shape = SubResource("CircleShape2D_pxqvm")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523397148]
-texture = ExtResource("2_nokgg")
-
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]
 
 [node name="AttackHitbox" type="Area2D" parent="." unique_id=226814290]
+position = Vector2(-40, 10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=2057204340]
-position = Vector2(107, 0)
+position = Vector2(67.8125, 3.5)
 shape = SubResource("RectangleShape2D_pxqvm")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1219108259]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1794919385]
-position = Vector2(0.5, -0.5)
-shape = SubResource("RectangleShape2D_rgo7p")
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_k5pfw")
 
 [node name="AttackCooldown" type="Timer" parent="." unique_id=1923167955]
 wait_time = 0.706

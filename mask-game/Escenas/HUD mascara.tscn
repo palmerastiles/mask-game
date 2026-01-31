@@ -9,16 +9,16 @@
 script = ExtResource("1_h1coa")
 
 [node name="PjProtaMask1" type="Sprite2D" parent="." unique_id=203756989]
-position = Vector2(528, 240)
+position = Vector2(146.79999, 40.8)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("4_w2p86")
 
 [node name="Mask3" type="Sprite2D" parent="." unique_id=1639377890]
-position = Vector2(962, 472)
+position = Vector2(194.00009, 83.000015)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("3_wc7xb")
 
 [node name="Mask2" type="Sprite2D" parent="." unique_id=138220269]
-position = Vector2(237, 544)
+position = Vector2(99.999985, 85.00003)
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("2_0qnxx")
