@@ -16,11 +16,12 @@ var vidaMinima = 0
 enum Estado { DEAMBULANDO, PERSEGUIR, ATACAR, MUERTO }
 var estado_actual = Estado.DEAMBULANDO
 
-# Variables de daño
+# Variables de daño y ataque
 var muerto: bool = false
 var recibeDaño: bool = false
 var daño = 3
 var realizandoDaño1: bool = false
+var puede_atacar: bool = true
 
 # Variables de movimiento
 var direccion: Vector2 = Vector2.RIGHT
@@ -99,7 +100,7 @@ func realizar_ataque():
 		print("Atacando al jugador!")
 		# Dañar al jugador si está en rango
 		var distancia = global_position.distance_to(jugador_ref.global_position)
-		if distancia < 50:
+		if distancia < 250:
 			# Llamar a función de daño en el jugador
 			# jugador_ref.recibir_daño(daño)
 			pass

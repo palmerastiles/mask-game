@@ -9,16 +9,18 @@ size = Vector2(123, 118)
 [sub_resource type="CircleShape2D" id="CircleShape2D_pxqvm"]
 radius = 301.02658
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pxqvm"]
+size = Vector2(199.5, 52)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rgo7p"]
+size = Vector2(121, 121)
+
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1751731663]
 script = ExtResource("1_pxqvm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
 position = Vector2(-2.5, 0)
 shape = SubResource("RectangleShape2D_51nst")
-
-[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D" unique_id=1641163312]
-scale = Vector2(0.1484375, 0.1484375)
-texture = ExtResource("2_nokgg")
 
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
 
@@ -29,3 +31,19 @@ shape = SubResource("CircleShape2D_pxqvm")
 texture = ExtResource("2_nokgg")
 
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=226814290]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=2057204340]
+position = Vector2(107, 0)
+shape = SubResource("RectangleShape2D_pxqvm")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1219108259]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1794919385]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_rgo7p")
+
+[node name="AttackCooldown" type="Timer" parent="." unique_id=1923167955]
+wait_time = 0.706
+one_shot = true

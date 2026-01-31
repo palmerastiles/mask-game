@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://c23t3r35jocaw"]
+
+[sub_resource type="GDScript" id="GDScript_w5bk4"]
+script/source = "extends CharacterBody2D
+
+
+@export var speed := 200.0
+@export var gravity := 900.0
+
+var player: Node2D = null
+var chasing := false
+
+func _physics_process(delta):
+	# Gravedad
+	if not is_on_floor():
+		velocity.y += gravity * delta
+
+	if chasing and player:
+		var direction = sign(player.global_position.x - global_position.x)
+		velocity.x = direction * speed
+	else:
+		velocity.x = 0
+
+	move_and_slide()
+
+
+func _on_detector_de_jugador_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\"):
+		player = body
+		chasing = true
+
+
+func _on_detector_de_jugador_body_exited(body: Node2D) -> void:
+	if body == player:
+		player = null
+		chasing = false
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ylt4w"]
+load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmq2w"]
+size = Vector2(132, 130)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_82frh"]
+radius = 432.07407
+
+[node name="enemigo_renacido" type="CharacterBody2D" unique_id=232099185]
+script = SubResource("GDScript_w5bk4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1140884213]
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1050924718 groups=["player"]]
+modulate = Color(1, 0.21960784, 0.3529412, 1)
+position = Vector2(-1, 1)
+texture = SubResource("CompressedTexture2D_ylt4w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=803979115 groups=["player"]]
+position = Vector2(-1, 2)
+shape = SubResource("RectangleShape2D_hmq2w")
+
+[node name="DetectorDeJugador" type="Area2D" parent="." unique_id=1033416184]
+position = Vector2(0, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectorDeJugador" unique_id=724874450]
+shape = SubResource("CircleShape2D_82frh")
+
+[connection signal="body_entered" from="DetectorDeJugador" to="." method="_on_detector_de_jugador_body_entered"]
+[connection signal="body_exited" from="DetectorDeJugador" to="." method="_on_detector_de_jugador_body_exited"]
