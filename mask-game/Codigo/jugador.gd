@@ -18,6 +18,21 @@ var Rotacion = []
 var SPEED = 300.0
 var JUMP_VELOCITY = -600.0
 
+#Tiempo de uso y cooldowns para las mascaras
+@export var TIEMPO_MAX_USO = 5.0  # Tiempo de uso de mascara (igual pa toos)
+@export var COOLDOWN_DURACION = 10.0
+
+var tiempo_uso_restante = 0.0
+var esta_usando_mascara = false #??
+
+# Cooldowns independientes de mascaras
+var cooldowns = {
+	Estado.Sacrificio: 0.0,
+	Estado.Ira: 0.0,
+	Estado.Burla: 0.0,
+	Estado.Dios: 0.0
+}
+
 
 func _ready() -> void:
 	Update_Mascara_Desbloqueada()
@@ -34,14 +49,14 @@ func _input(event: InputEvent) -> void:
 
 func ciclo_mascara(direccion: int):  # Corregido: agregar dos puntos y tipo
 	if Rotacion.size() <= 1:
-		return  # Corregido: indentación
+		return  # na
 	
 	var valor_actual = Rotacion.find(Actual)  # Corregido: usar guión bajo, no espacio
 	
-	if valor_actual == -1:
+	if valor_actual == -1: #Si no encuentra na
 		valor_actual = 0
 	
-	var nuevo_valor = (valor_actual + direccion) % Rotacion.size()  # Corregido: variable correcta
+	var nuevo_valor = (valor_actual + direccion) % Rotacion.size()  # Anillo
 	if nuevo_valor < 0:
 		nuevo_valor = Rotacion.size() - 1
 	
@@ -49,13 +64,42 @@ func ciclo_mascara(direccion: int):  # Corregido: agregar dos puntos y tipo
 	Equipar_Mascara(Mascara_seleccionada)  # Corregido: punto y coma separado
 
 func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
-	if Mascara not in Desbloqueada:
-		print("Máscara Bloqueada: ", Mascara)
-		return
-	
+	"""
 	Actual = Mascara
 	print("Máscara equipada: ", Estado.keys()[Mascara])  # Corregido: sintaxis
+	#Toca cambiarlo
 	
+	#Dado que rotacion se actualiza de desbloqueadas, nunca habra una mascara 
+	sin desbloquear en el mismo
+	
+	# 1. Si la máscara está bloqueada, no hacer nada 
+	if Mascara not in Desbloqueada:
+		print("Acceso denegado: Máscara bloqueada.")
+		return
+	"""
+
+	# Si la máscara tiene cooldown activo, no permitir cambio
+	if cooldowns[Mascara] > 0:
+		print("¡Mascara ", Estado.keys()[Mascara], " en cooldown! Faltan: ", snapped(cooldowns[Mascara], 0.1), "s")
+		return
+
+	# QUITAR mascara antes de terminar (entra en cooldown)
+	# (Excepto la de Sacrificio)
+	if Actual != Mascara and Actual != Estado.Sacrificio:
+		print("Quitando ", Estado.keys()[Actual], ". Cooldown iniciado")
+		cooldowns[Actual] = COOLDOWN_DURACION
+	
+	# 4. LÓGICA DE ENTRADA: Equipar la nueva
+	if Mascara == Estado.Sacrificio: # Para que no le aparezca cooldown a sacrificio 
+		print("Equipada: ", Estado.keys()[Actual])
+	else:
+		print("Equipada: ", Estado.keys()[Actual], " | Tiempo de uso: ", TIEMPO_MAX_USO, "s")
+	Actual = Mascara
+	tiempo_uso_restante = TIEMPO_MAX_USO # Reiniciamos el tiempo de uso global
+	esta_usando_mascara = (Actual != Estado.Sacrificio) # Sacrificio no gasta tiempo
+	
+
+
 	# Aquí puedes añadir efectos específicos para cada máscara
 	match Mascara:
 		Estado.Sacrificio:
@@ -85,6 +129,8 @@ func Update_Rotacion():
 	#     Rotacion.erase(Estado.Sacrificio)
 
 func _physics_process(delta: float) -> void:
+	# Tiempos para mascaras
+	procesar_tiempos(delta)
 	# Gravedad
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -110,6 +156,23 @@ func _physics_process(delta: float) -> void:
 		$AnimatedSprite2D.play("Caminata") 
 		$AnimatedSprite2D.flip_h = false
 	move_and_slide()
+
+#Funcion para tiempos de mascaras
+func procesar_tiempos(delta: float):
+	# Reducir todos los cooldowns
+	for m in cooldowns:
+		if cooldowns[m] > 0:
+			cooldowns[m] -= delta
+			if cooldowns[m] <= 0: #Cooldown acabado
+				cooldowns[m] = 0
+				print("Mascara ", Estado.keys()[m], " lista para usar de nuevo.")
+
+	# Reducir tiempo actual
+	if esta_usando_mascara:
+		tiempo_uso_restante -= delta
+		if tiempo_uso_restante <= 0:
+			print("¡Tiempo agotado! Volviendo a Sacrificio.")
+			Equipar_Mascara(Estado.Sacrificio) #Forzar sacrificio
 
 # Función para desbloquear máscaras desde otros lugares del juego
 func Desbloquear_Ira():
