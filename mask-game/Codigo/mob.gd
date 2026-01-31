@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-class_name enemigoRenacido
+#class_name enemigoRenacido
 
 # Controla la velocidad base del enemigo
 const VELOCIDAD_NORMAL = 30
