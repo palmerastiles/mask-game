@@ -1,33 +1,26 @@
-[gd_scene format=3 uid="uid://devegk84gibw8"]
+[gd_scene format=3 uid="uid://6qja6jmqhdrh"]
 
-[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="1_586bq"]
-[ext_resource type="PackedScene" uid="uid://b1iogr26pkp7j" path="res://Escenas/Jugador.tscn" id="2_ujst0"]
-[ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="3_8guyl"]
-[ext_resource type="PackedScene" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
+[ext_resource type="PackedScene" uid="uid://bh75w4yi3nwny" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
+[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
+[ext_resource type="PackedScene" uid="uid://c23t3r35jocaw" path="res://Escenas/enemigo_renacido.tscn" id="3_8n0vj"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hmgs2"]
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
-[node name="suelo" type="Node2D" unique_id=1005876385]
+[node name="suelo" type="Node2D" unique_id=603382769]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1720438769]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=510015800]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1162872957]
-position = Vector2(617, 607)
-shape = SubResource("WorldBoundaryShape2D_hmgs2")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2074029504]
+position = Vector2(606, 639)
+shape = SubResource("WorldBoundaryShape2D_hy3li")
 
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D/CollisionShape2D" unique_id=1045098291]
-position = Vector2(4.5000305, 28.5)
-scale = Vector2(16.929688, 0.5546875)
-texture = ExtResource("1_586bq")
+[node name="CharacterBody2D" parent="." unique_id=1676021811 groups=["player"] instance=ExtResource("1_qdjju")]
+position = Vector2(314, 279)
 
-[node name="jugador" parent="." unique_id=1676021811 instance=ExtResource("2_ujst0")]
-position = Vector2(78, 492)
-Ira_Desbloqueada = false
-Burla_Desbloqueada = false
-Dios_Desbloqueada = false
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
+position = Vector2(463, 693)
+scale = Vector2(13.15625, 1)
+texture = ExtResource("2_xq07r")
 
-[node name="CharacterBody2D" parent="." unique_id=1751731663 instance=ExtResource("3_8guyl")]
-position = Vector2(831, 512)
-
-[node name="objeto_mascara" parent="." unique_id=1223132703 instance=ExtResource("4_8guyl")]
-position = Vector2(1340, 540)
+[node name="enemigo_renacido" parent="." unique_id=232099185 groups=["player"] instance=ExtResource("3_8n0vj")]
+position = Vector2(-196, 280)
