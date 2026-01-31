@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="1_586bq"]
 [ext_resource type="PackedScene" uid="uid://b1iogr26pkp7j" path="res://Escenas/Jugador.tscn" id="2_ujst0"]
 [ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="3_8guyl"]
+[ext_resource type="PackedScene" uid="uid://crlbgf5bfq4uc" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hmgs2"]
 
@@ -19,8 +20,14 @@ position = Vector2(4.5000305, 28.5)
 scale = Vector2(16.929688, 0.5546875)
 texture = ExtResource("1_586bq")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/CollisionShape2D" unique_id=1722511226]
+
 [node name="jugador" parent="." unique_id=1676021811 instance=ExtResource("2_ujst0")]
 position = Vector2(78, 492)
 
 [node name="CharacterBody2D" parent="." unique_id=1751731663 instance=ExtResource("3_8guyl")]
 position = Vector2(831, 512)
+
+[node name="objeto_mascara" parent="." unique_id=1223132703 instance=ExtResource("4_8guyl")]
+position = Vector2(1340, 540)
+mascara_a_desbloquear = 2
