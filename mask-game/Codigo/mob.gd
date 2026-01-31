@@ -59,6 +59,7 @@ func _physics_process(delta: float) -> void:
 		Estado.PERSEGUIR:
 			perseguir_jugador()
 		Estado.ATACAR:
+			
 			realizar_ataque()
 	
 	# Aplicar movimiento

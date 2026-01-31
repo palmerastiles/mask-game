@@ -1,11 +1,11 @@
 # UI_MaskHUD.gd
-extends Control
+extends CanvasLayer  # Cambia de Control a CanvasLayer
 
-@onready var player = get_node("../Player")
+@onready var player = get_node("../Player")  # Ajusta la ruta según tu escena
 @onready var mask_icons = [
-	$Mask1Icon,
-	$Mask2Icon,
-	$Mask3Icon
+	$PjProtaMask1,
+	$Mask2,
+	$Mask3
 ]
 @onready var mask_labels = [
 	$Mask1Label,
@@ -13,12 +13,19 @@ extends Control
 	$Mask3Label
 ]
 
-func _process(delta):
+func _ready():
+	# Si el CanvasLayer está en la misma escena que el jugador
+	player = get_parent().get_node("Player")  # Ajusta según tu estructura
+
+func _process(_delta):
 	update_mask_display()
 
 func update_mask_display():
-	var masks = player.mask_rotation_order
-	var current_mask = player.current_mask
+	if not player:
+		return
+	
+	var masks = player.Rotacion  # Usar Rotacion en lugar de mask_rotation_order
+	var current_mask = player.Actual  # Usar Actual en lugar de current_mask
 	
 	# Actualizar iconos
 	for i in range(3):

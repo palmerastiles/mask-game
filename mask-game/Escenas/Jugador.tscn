@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://d0oo8ivey6eh8" path="res://Assets/efectos/mask 2.png" id="18_ldqfe"]
 [ext_resource type="Texture2D" uid="uid://ce0jmbk2nhaf4" path="res://Assets/efectos/mask 3.png" id="19_5d76g"]
 [ext_resource type="Texture2D" uid="uid://dvnr6et74hq4e" path="res://Assets/efectos/pj prota mask 1.png" id="20_sb2or"]
+[ext_resource type="PackedScene" uid="uid://iqrh31wd8rbm" path="res://Escenas/HUD mascara.tscn" id="21_5d76g"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
 resource_local_to_scene = true
@@ -116,6 +117,7 @@ Burla_Desbloqueada = true
 Dios_Desbloqueada = true
 TIEMPO_MAX_USO = 31.36
 COOLDOWN_DURACION = 0.0
+metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
 position = Vector2(0.99999905, -15)
@@ -154,7 +156,7 @@ tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 
 [node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
 visible = false
-position = Vector2(-13.437494, -17.562506)
+position = Vector2(-15, -16.000002)
 scale = Vector2(0.1648137, 0.1648137)
 texture = ExtResource("18_ldqfe")
 metadata/_edit_group_ = true
@@ -172,3 +174,5 @@ position = Vector2(0.3749979, -19.625)
 scale = Vector2(0.18118992, 0.18118992)
 texture = ExtResource("20_sb2or")
 metadata/_edit_group_ = true
+
+[node name="CanvasLayer" parent="." unique_id=1909854209 instance=ExtResource("21_5d76g")]
