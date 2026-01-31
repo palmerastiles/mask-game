@@ -91,9 +91,9 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 	
 	# 4. LÓGICA DE ENTRADA: Equipar la nueva
 	if Mascara == Estado.Sacrificio: # Para que no le aparezca cooldown a sacrificio 
-		print("Equipada: ", Estado.keys()[Actual])
+		print("Equipada: ", Estado.keys()[Mascara])
 	else:
-		print("Equipada: ", Estado.keys()[Actual], " | Tiempo de uso: ", TIEMPO_MAX_USO, "s")
+		print("Equipada: ", Estado.keys()[Mascara], " | Tiempo de uso: ", TIEMPO_MAX_USO, "s")
 	Actual = Mascara
 	tiempo_uso_restante = TIEMPO_MAX_USO # Reiniciamos el tiempo de uso global
 	esta_usando_mascara = (Actual != Estado.Sacrificio) # Sacrificio no gasta tiempo
