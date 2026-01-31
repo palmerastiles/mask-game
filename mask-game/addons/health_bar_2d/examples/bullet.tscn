@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bpacxhoeb3ejf"]
+
+[ext_resource type="Script" uid="uid://djf77cmls7pdl" path="res://addons/health_bar_2d/examples/bullet.gd" id="1"]
+
+[node name="Bullet" type="Area2D" unique_id=321737305]
+collision_layer = 2
+collision_mask = 17
+script = ExtResource("1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=956041517]
+polygon = PackedVector2Array(0, 0, -2, -2, -2, 2)
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=503299938]
+position = Vector2(0, -0.5)
+scale = Vector2(2, 1.5)
+polygon = PackedVector2Array(-1, -1, -1, 1.66667, 0, 0.333333)
+
+[node name="VN" type="VisibleOnScreenNotifier2D" parent="." unique_id=947587422]

@@ -6,11 +6,11 @@ enum Estado {
 	Burla,
 	Dios 
 }
-
+signal health_changed #Señal para el addon de barra 2d
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]
 var Rotacion = []
-@export var Vida_Maxima = 100
+@export var Vida_Maxima := 100
 @export var Daño_base = 10
 var Daño_actual = Daño_base
 @export var mult_daño_recibido = 1.0
@@ -40,12 +40,12 @@ var cooldowns = {
 
 
 func _ready() -> void:
+	$HealthBar2D.initialize("health_changed", Vida_Actual)
 	Update_Mascara_Desbloqueada()
 	Update_Rotacion()
 	if Rotacion.size() > 0:
 		Actual = Rotacion[0]
 		Equipar_Mascara(Actual)  # Corregido: llamar a la función
-
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Cambio_F"):
 		ciclo_mascara(1)
@@ -137,7 +137,7 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 func recibir_daño(cantidad: int):
 	var daño_final = cantidad * mult_daño_recibido
 	Vida_Actual -= daño_final
-	
+	emit_signal("health_changed", Vida_Actual)
 	print("Recibiste ", daño_final, " de daño. Vida restante: ", Vida_Actual)
 	
 	# Efecto Sacrificio:
