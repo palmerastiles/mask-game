@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bkuy73irhmuq2" path="res://Jugador.tscn" id="1_qdjju"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
+[ext_resource type="PackedScene" uid="uid://dtkiv7q7grr21" path="res://mob.tscn" id="3_8n0vj"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
@@ -20,3 +21,5 @@ position = Vector2(521, 505)
 position = Vector2(463, 693)
 scale = Vector2(13.15625, 1)
 texture = ExtResource("2_xq07r")
+
+[node name="Mob" parent="." unique_id=503593829 instance=ExtResource("3_8n0vj")]
