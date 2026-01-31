@@ -27,7 +27,8 @@ var puede_atacar: bool = true
 # Variables de movimiento
 var direccion: Vector2 = Vector2.RIGHT
 var fuerzaRetroceso = 200
-var jugador_ref = null  # Referencia al jugador
+var jugador_ref = null  # Referencia al jugador (cercania)
+var jugador_ref_atack_hit = null #Referencia al jugador (AttackHitbox)
 
 @onready var player_detection_zone = $PlayerDetectionZone  # Necesitarás un Area2D como hijo
 @onready var sprite = $Sprite2D  # Asume que tienes un nodo Sprite2D
@@ -59,11 +60,7 @@ func _physics_process(delta: float) -> void:
 		Estado.PERSEGUIR:
 			perseguir_jugador()
 		Estado.ATACAR:
-
-			
-
 			#PONER AQUI LA INICIALIZACION DE LA ANIMACION DE ATAQUE
-
 			realizar_ataque()
 	
 	# Aplicar movimiento
@@ -90,9 +87,6 @@ func perseguir_jugador():
 		direccion.x = sign(direccion_hacia_jugador.x)
 		
 		# Verificar si está lo suficientemente cerca para atacar
-		#Aqui habia if de distancia
-		estado_actual = Estado.ATACAR
-
 
 
 func realizar_ataque():
@@ -100,7 +94,7 @@ func realizar_ataque():
 	velocity.x = 0
 	
 	# Aquí implementas la lógica de ataque
-	if jugador_ref:
+	if jugador_ref_atack_hit:
 		print("Atacando al jugador!")
 		# Dañar al jugador si está en rango
 		#Aqui habia un if de distancia
@@ -108,11 +102,6 @@ func realizar_ataque():
 	# Después de atacar, volver a perseguir
 	estado_actual = Estado.PERSEGUIR
 
-
-	
-
-
-	
 
 func _on_direction_timer_timeout():
 	if estado_actual == Estado.DEAMBULANDO and not muerto:
@@ -173,8 +162,8 @@ func choose_float(array):
 
 func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
 	if body.is_in_group("player"):
-		print("TETOQUE")
-		body.recibir_daño(daño)
+		jugador_ref_atack_hit = body
+		estado_actual = Estado.ATACAR
 
 
 func _on_player_detection_zone_body_exited(body: Node2D) -> void:
