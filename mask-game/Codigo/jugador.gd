@@ -16,9 +16,11 @@ var Daño_actual = Daño_base
 @export var mult_daño_recibido = 1.0
 @onready var Vida_Actual = Vida_Maxima
 @onready var Animacion = $AnimatedSprite2D
+@onready var menu_muerte = $Camera2D/CanvasLayer/MenuMuerte
 @export var Ira_Desbloqueada = false
 @export var Burla_Desbloqueada = false
 @export var Dios_Desbloqueada = false
+
 
 var SPEED = 300.0
 var JUMP_VELOCITY = -600.0
@@ -169,8 +171,11 @@ func recibir_daño(cantidad: int):
 		morir()
 
 func morir():
-	# Reiniciar escena o lo que prefieras
-	get_tree().reload_current_scene()
+	# En lugar de reiniciar instantáneamente, pausamos el juego y mostramos el menú
+	print("El jugador ha muerto.")
+	menu_muerte.visible = true
+	get_tree().paused = true # Pausa la física y el movimiento
+	# Importante: El Process Mode del MenuMuerte debe ser "Always" en el Inspector??
 
 
 
@@ -363,3 +368,14 @@ func Desbloquear_Dios():
 # Método helper para obtener nombre actual
 func Obtener_Mascara_Actual() -> String:
 	return Estado.keys()[Actual]
+
+
+func _on_retry_bttn_pressed() -> void:
+	get_tree().paused = false # Quitamos la pausa
+	get_tree().reload_current_scene() # Reiniciamos el nivel
+
+
+func _on_menu_bttn_pressed() -> void:
+	get_tree().paused = false
+	print("Cambiando a Menú Principal (Pendiente de implementar)")
+	# Aquí irá: get_tree().change_scene_to_file("res://escenas/menu.tscn")

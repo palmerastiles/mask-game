@@ -145,6 +145,31 @@ disabled = true
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
 visible = false
 
+[node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
+
+[node name="MenuMuerte" type="Control" parent="Camera2D/CanvasLayer" unique_id=1896111280]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Camera2D/CanvasLayer/MenuMuerte" unique_id=1066239983]
+layout_mode = 0
+offset_right = 166.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+alignment = 1
+
+[node name="Retry_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1162891544]
+layout_mode = 2
+text = "REINTENTAR"
+
+[node name="Menu_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1198050434]
+layout_mode = 2
+text = "MENU"
+
 [node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
 visible = false
 offset_left = -496.0
@@ -175,4 +200,5 @@ scale = Vector2(0.18118992, 0.18118992)
 texture = ExtResource("20_sb2or")
 metadata/_edit_group_ = true
 
-[node name="CanvasLayer" parent="." unique_id=1909854209 instance=ExtResource("21_5d76g")]
+[connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
+[connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]

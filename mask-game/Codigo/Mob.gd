@@ -100,7 +100,7 @@ func realizar_ataque():
 		#Aqui habia un if de distancia
 		jugador_ref.recibir_daño(daño)
 	# Después de atacar, volver a perseguir
-	estado_actual = Estado.PERSEGUIR
+	#estado_actual = Estado.PERSEGUIR
 
 
 func _on_direction_timer_timeout():
