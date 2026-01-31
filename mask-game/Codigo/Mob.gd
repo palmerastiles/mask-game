@@ -39,8 +39,8 @@ func _ready():
 	
 	# Conectar señales si usas un Area2D para detección
 	if player_detection_zone:
-		player_detection_zone.body_entered.connect(_on_player_detected)
-		player_detection_zone.body_exited.connect(_on_player_lost)
+		player_detection_zone.body_entered.connect(_on_player_detection_zone_body_entered)
+		player_detection_zone.body_exited.connect(_on_player_detection_zone_body_exited)
 
 func _physics_process(delta: float) -> void:
 	if muerto:
@@ -108,14 +108,11 @@ func realizar_ataque():
 	# Después de atacar, volver a perseguir
 	estado_actual = Estado.PERSEGUIR
 
-func _on_player_detected(body):
+
 	
 
-func _on_player_lost(body):
-	if body == jugador_ref:
-		jugador_ref = null
-		estado_actual = Estado.DEAMBULANDO
-		print("Jugador perdido")
+
+	
 
 func _on_direction_timer_timeout():
 	if estado_actual == Estado.DEAMBULANDO and not muerto:
@@ -181,4 +178,14 @@ func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en
 
 
 func _on_player_detection_zone_body_exited(body: Node2D) -> void:
-	pass # Replace with function body.
+	if body == jugador_ref:
+		jugador_ref = null
+		estado_actual = Estado.DEAMBULANDO
+		print("Jugador perdido")
+
+
+func _on_player_detection_zone_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player") and not muerto:
+		jugador_ref = body
+		estado_actual = Estado.PERSEGUIR
+		print("¡Jugador detectado!")

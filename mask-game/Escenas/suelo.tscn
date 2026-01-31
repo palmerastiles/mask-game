@@ -3,7 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://bh75w4yi3nwny" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
 [ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="4_6pcy2"]
-[ext_resource type="PackedScene" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
+[ext_resource type="PackedScene" uid="uid://crlbgf5bfq4uc" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
+[ext_resource type="Script" uid="uid://dgeif5a86vkkt" path="res://Codigo/Mob.gd" id="5_6pcy2"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
@@ -29,3 +30,4 @@ mascara_a_desbloquear = 1
 
 [node name="CharacterBody2D2" parent="." unique_id=1751731663 instance=ExtResource("4_6pcy2")]
 position = Vector2(-122, 482)
+script = ExtResource("5_6pcy2")
