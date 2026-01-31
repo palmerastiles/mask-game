@@ -31,7 +31,7 @@ var jugador_ref = null  # Referencia al jugador (cercania)
 var jugador_ref_atack_hit = null #Referencia al jugador (AttackHitbox)
 
 @onready var player_detection_zone = $PlayerDetectionZone  # Necesitarás un Area2D como hijo
-@onready var sprite = $Sprite2D  # Asume que tienes un nodo Sprite2D
+@onready var sprite = $AnimatedSprite2D # Asume que tienes un nodo Sprite2D
 
 func _ready():
 	# Iniciar el timer para cambiar dirección
@@ -85,7 +85,13 @@ func perseguir_jugador():
 		
 		# Actualizar dirección para el sprite
 		direccion.x = sign(direccion_hacia_jugador.x)
-		
+		sprite.play("correr")
+		if direccion.x > 0:
+			sprite.flip_h = false
+			$AttackHitbox.scale.x = 1
+		else:
+			sprite.flip_h = true
+			$AttackHitbox.scale.x = -1
 		# Verificar si está lo suficientemente cerca para atacar
 
 
@@ -96,6 +102,7 @@ func realizar_ataque():
 	# Aquí implementas la lógica de ataque
 	if jugador_ref_atack_hit:
 		print("Atacando al jugador!")
+		sprite.play("ataque")
 		# Dañar al jugador si está en rango
 		#Aqui habia un if de distancia
 		jugador_ref.recibir_daño(daño)
