@@ -17,6 +17,14 @@ shape = SubResource("WorldBoundaryShape2D_hy3li")
 
 [node name="CharacterBody2D" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
 position = Vector2(314, 279)
+Vida_Maxima = null
+"Daño_base" = null
+"mult_daño_recibido" = null
+Ira_Desbloqueada = null
+Burla_Desbloqueada = null
+Dios_Desbloqueada = null
+TIEMPO_MAX_USO = null
+COOLDOWN_DURACION = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
 position = Vector2(463, 693)

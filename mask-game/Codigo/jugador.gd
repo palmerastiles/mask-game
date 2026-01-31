@@ -12,6 +12,8 @@ var Desbloqueada = [Estado.Sacrificio]
 var Rotacion = []
 @export var Vida_Maxima = 100
 @export var Daño_base = 10
+var Daño_actual = Daño_base
+@export var mult_daño_recibido = 1.0
 @onready var Vida_Actual = Vida_Maxima
 @onready var Animacion = $AnimatedSprite2D
 @export var Ira_Desbloqueada = false
@@ -101,21 +103,61 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 	tiempo_uso_restante = TIEMPO_MAX_USO # Reiniciamos el tiempo de uso global
 	esta_usando_mascara = (Actual != Estado.Sacrificio) # Sacrificio no gasta tiempo
 	
-
+	# RESETEAMOS ESTADISTICAS BASE ANTES DE APLICAR MODIFICADORES DE LAS MASCARAS
+	SPEED = 300.0
+	JUMP_VELOCITY = -600.0
+	Daño_actual = Daño_base
+	mult_daño_recibido = 1.0
+	self.scale = Vector2(1, 1) # ESTA SERA LA ESCALA POR DEFECTO
 
 	# Aquí puedes añadir efectos específicos para cada máscara
 	match Mascara:
 		Estado.Sacrificio:
 			Animacion.modulate = Color(1, 1, 1)  # Color normal
-		
+			mult_daño_recibido = 1.5 # +50% daño recibido
+			print("MODO SACRIFICIO: Daño recibido x1.5")
 		Estado.Ira:
 			Animacion.modulate = Color(1, 0.2, 0.2)  # Rojo
+			Daño_actual = Daño_base * 2.0 # Doble de daño
+			print("MODO IRA: Daño de ataque x2")
 		Estado.Burla:
 			Animacion.modulate = Color(0.2, 1, 0.2)  # Verde
-			SPEED + 400
+			SPEED = 600.0 # Doble de velocidad
+			Daño_actual = Daño_base * 0.5 # 50% menos de daño
+			print("MODO BURLA: Veloz pero débil")
 			
 		Estado.Dios:
 			Animacion.modulate = Color(1, 1, 0.2)  # Amarillo
+			mult_daño_recibido = 0.5 # -50% daño recibido
+			SPEED = 150.0 # -50% Speed
+			self.scale = Vector2(1.3, 1.3) # Se hace mas grande
+			print("MODO DIOS: Tanque lento")
+
+#FUNCION A LLAMAR AL RECIBIR DAÑO (MAÑO)
+func recibir_daño(cantidad: int):
+	var daño_final = cantidad * mult_daño_recibido
+	Vida_Actual -= daño_final
+	
+	print("Recibiste ", daño_final, " de daño. Vida restante: ", Vida_Actual)
+	
+	# Efecto extra caótico para Sacrificio:
+	if Actual == Estado.Sacrificio:
+		# Si te pegan en Sacrificio, reduces cooldown de las demás 2 segundos
+		for m in cooldowns:
+			if cooldowns[m] > 0: #Bajar 2s a todos los que tengan cooldown activo
+				cooldowns[m] -= 2.0
+				if cooldowns[m] <= 0: #Resetear a 0 el cooldown en caso de valores negativos
+					cooldowns[m] = 0
+		print("¡Sacrificio aceptado! Cooldowns reducidos.")
+
+	if Vida_Actual <= 0:
+		morir()
+
+func morir():
+	# Reiniciar escena o lo que prefieras
+	get_tree().reload_current_scene()
+
+
 
 func Update_Mascara_Desbloqueada():
 	Desbloqueada = [Estado.Sacrificio]  # Siempre empieza con Sacrificio
