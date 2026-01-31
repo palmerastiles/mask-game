@@ -10,6 +10,9 @@ enum Estado {
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]
 var Rotacion = []
+@export var Vida_Maxima = 100
+@export var Daño_base = 10
+@onready var Vida_Actual = Vida_Maxima
 @onready var Animacion = $AnimatedSprite2D
 @export var Ira_Desbloqueada = false
 @export var Burla_Desbloqueada = false
