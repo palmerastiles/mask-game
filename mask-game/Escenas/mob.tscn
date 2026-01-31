@@ -273,7 +273,7 @@ height = 112.0
 radius = 301.02658
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pxqvm"]
-size = Vector2(124.375, 9)
+size = Vector2(50.375, 5)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k5pfw"]
 radius = 36.0
@@ -286,12 +286,14 @@ script = SubResource("GDScript_v4v7w")
 position = Vector2(2.9802322e-08, -9)
 scale = Vector2(0.14331503, 0.14331503)
 sprite_frames = SubResource("SpriteFrames_wkxbj")
-animation = &"correr"
+animation = &"ataque"
+frame = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
 shape = SubResource("CapsuleShape2D_3c6bj")
 
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
 shape = SubResource("CircleShape2D_pxqvm")
@@ -299,10 +301,10 @@ shape = SubResource("CircleShape2D_pxqvm")
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]
 
 [node name="AttackHitbox" type="Area2D" parent="." unique_id=226814290]
-position = Vector2(-40, 10)
+position = Vector2(-6, 4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=2057204340]
-position = Vector2(67.8125, 3.5)
+position = Vector2(30.8125, 3.5)
 shape = SubResource("RectangleShape2D_pxqvm")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1219108259]
