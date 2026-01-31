@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://b00j8bgtup7t4"]
 
+[ext_resource type="Script" uid="uid://dypu77qfx5gla" path="res://enemigo_renacido.gd" id="1_hmq2w"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="1_ylt4w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmq2w"]
 size = Vector2(114, 84)
 
 [node name="enemigoRenacido" type="CharacterBody2D" unique_id=486773317]
+script = ExtResource("1_hmq2w")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=118045067]
 

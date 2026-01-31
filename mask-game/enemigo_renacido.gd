@@ -1,25 +1,43 @@
 extends CharacterBody2D
 
+class_name enemigoRenacido
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+#Controla la velocidad base del enemigo y la modifica si está el jugador cerca
+const VELOCIDAD = 10
+var velocidadPersiguiendo: bool
+
+#Las variables para controlar el hp del enemigo
+var vida = 10
+var vidaMaxima = 10
+var vidaMinima = 0
 
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+#Mecanicas cuando el enemigo está muerto,  
+#sprite cuando recibe daño del jugador, el daño que realiza al jugador,
+#sprite cuando realiza un ataque al jugador (varían según el ataque que haga el enemigo)
+var muerto: bool = false
+var recibeDaño: bool = false
+var daño = 3
+var realizandoDaño1: bool = false
+#var realizandoDaño2: bool = false
+#var realizandoDaño3: bool = false
 
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+# Configuracion para la dinamica de movimiento del enemigo direccion a la que se mueve
+# La gravedad que tiene el enemigo
+# Y la cantidad de movimiento que tendrá en caso de ser golpeado por un enemigo.
+var direccion: Vector2
+const gravity = 900
+var fuerzaRetroceso = 200
+#var jugadorMuerto: true #Posiblemente ni se use, es para que el enemigo siga moviendose en lo que el jugador revive
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	move_and_slide()
+
+func cambio_direccion_por_tiempo():
+	$DirectionTimer.wait_time = choose([0.5, 1.0, 1.5])
+	if !velocidadPersiguiendo:
+		direccion = choose([Vector2.RIGHT, Vector2.LEFT])
+		velocity.x = 0
+	
+func choose(array):
+	array.shuffle()
+	return array.front()
