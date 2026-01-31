@@ -10,7 +10,7 @@ enum Estado {
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]
 var Rotacion = []
-
+@onready var Animacion = $AnimatedSprite2D
 @export var Ira_Desbloqueada = false
 @export var Burla_Desbloqueada = false
 @export var Dios_Desbloqueada = false
@@ -59,13 +59,15 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 	# Aquí puedes añadir efectos específicos para cada máscara
 	match Mascara:
 		Estado.Sacrificio:
-			$AnimatedSprite2D.modulate = Color(1, 1, 1)  # Color normal
+			Animacion.modulate = Color(1, 1, 1)  # Color normal
 		Estado.Ira:
-			$AnimatedSprite2D.modulate = Color(1, 0.2, 0.2)  # Rojo
+			Animacion.modulate = Color(1, 0.2, 0.2)  # Rojo
 		Estado.Burla:
-			$AnimatedSprite2D.modulate = Color(0.2, 1, 0.2)  # Verde
+			Animacion.modulate = Color(0.2, 1, 0.2)  # Verde
+			SPEED = SPEED + 400
+			
 		Estado.Dios:
-			$AnimatedSprite2D.modulate = Color(1, 1, 0.2)  # Amarillo
+			Animacion.modulate = Color(1, 1, 0.2)  # Amarillo
 
 func Update_Mascara_Desbloqueada():
 	Desbloqueada = [Estado.Sacrificio]  # Siempre empieza con Sacrificio
@@ -93,24 +95,46 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("Salto") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		
+	
 
 	# Movimiento horizontal
 	var direction := Input.get_axis("Izquierda", "Derecha")
 	if direction:
 		velocity.x = direction * SPEED
+		
+		Animacion.flip_h = direction < 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-		$AnimatedSprite2D.play("Idle") 
 		
-	if Input.is_action_just_pressed("Izquierda"):
-		$AnimatedSprite2D.play("Caminata") 
-		$AnimatedSprite2D.flip_h = true
 		
-	elif Input.is_action_just_pressed("Derecha"):
-		$AnimatedSprite2D.play("Caminata") 
-		$AnimatedSprite2D.flip_h = false
+	
+	
+		
+	manejar_animaciones_suavizado()
+		
 	move_and_slide()
-
+func manejar_animaciones_suavizado():
+	var en_suelo = is_on_floor()
+	var velocidad_y = velocity.y
+	
+	# Transición suave entre animaciones
+	if not en_suelo:
+		if velocidad_y < -50:  # Subiendo rápidamente
+			if Animacion.animation != "Salto":
+				Animacion.play("Salto")
+		elif velocidad_y > 50:  # Cayendo rápidamente
+			if Animacion.animation != "Caida":
+				Animacion.play("Caida")
+		else:  # En el aire pero con poca velocidad vertical
+			if Animacion.animation != "Caida":
+				Animacion.play("Caida")
+	else:
+		if abs(velocity.x) > 300:
+			if Animacion.animation != "Correr":
+				Animacion.play("Correr")
+		else:
+			if Animacion.animation != "Idle":
+				Animacion.play("Idle")
 # Función para desbloquear máscaras desde otros lugares del juego
 func Desbloquear_Ira():
 	Ira_Desbloqueada = true

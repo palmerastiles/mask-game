@@ -16,12 +16,19 @@
 [ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/pj prota salto/sprite_prota_salto1.png" id="14_361ip"]
 [ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
 [ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/pj prota salto/sprite_prota_salto3.png" id="16_31k2h"]
-[ext_resource type="Texture2D" uid="uid://cck678g4017b3" path="res://Assets/pj prota salto/sprite_prota_salto4.png" id="17_jjne1"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
 resource_local_to_scene = true
 resource_name = "Indio"
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_31k2h")
+}],
+"loop": true,
+"name": &"Caida",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_1340j")
@@ -37,7 +44,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Caminata",
-"speed": 5.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -54,7 +61,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Correr",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -79,15 +86,14 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("15_c06m1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("16_31k2h")
-}, {
-"duration": 1.0,
-"texture": ExtResource("17_jjne1")
 }],
-"loop": true,
+"loop": false,
 "name": &"Salto",
+"speed": 30.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"Suelo",
 "speed": 5.0
 }]
 
@@ -109,16 +115,13 @@ _data = {
 
 [node name="jugador" type="CharacterBody2D" unique_id=1676021811 groups=["player"]]
 script = ExtResource("1_pfvk3")
-Ira_Desbloqueada = true
 Burla_Desbloqueada = true
-Dios_Desbloqueada = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
 position = Vector2(0.99999905, -15)
 scale = Vector2(0.17908657, 0.17908657)
 sprite_frames = SubResource("SpriteFrames_btktc")
-animation = &"Salto"
-frame_progress = 0.6512213
+animation = &"Correr"
 speed_scale = 0.7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
