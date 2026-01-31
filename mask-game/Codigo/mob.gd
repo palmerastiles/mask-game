@@ -9,7 +9,7 @@ const DISTANCIA_DETECCION = 200  # Píxeles a los que detecta al jugador
 
 # Variables para controlar el hp del enemigo
 
-var vidaMaxima = 10
+var vidaMaxima = 100
 var vida = vidaMaxima
 var vidaMinima = 0
 
@@ -59,6 +59,7 @@ func _physics_process(delta: float) -> void:
 		Estado.PERSEGUIR:
 			perseguir_jugador()
 		Estado.ATACAR:
+			#PONER AQUI LA INICIALIZACION DE LA ANIMACION DE ATAQUE
 			realizar_ataque()
 	
 	# Aplicar movimiento
