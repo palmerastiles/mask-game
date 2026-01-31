@@ -3,9 +3,14 @@
 [node name="NPC_Renacido" type="Node2D" unique_id=1205307948]
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1127546047]
+collision_mask = 0
+gravity_scale = 0.0
+metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D" unique_id=1358586329]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1790484641]
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="RigidBody2D" unique_id=351623071]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=161062398]
