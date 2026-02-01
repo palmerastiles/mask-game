@@ -166,15 +166,6 @@ text = "REINTENTAR"
 layout_mode = 2
 text = "MENU"
 
-[node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
-visible = false
-offset_left = -496.0
-offset_top = -248.00003
-offset_right = -204.0
-offset_bottom = -199.00003
-scale = Vector2(5, 5)
-tint_progress = Color(0.6001417, 0, 0.23248968, 1)
-
 [node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
 visible = false
 position = Vector2(-15, -16.000002)
@@ -195,6 +186,15 @@ position = Vector2(0.3749979, -19.625)
 scale = Vector2(0.18118992, 0.18118992)
 texture = ExtResource("20_sb2or")
 metadata/_edit_group_ = true
+
+[node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
+visible = false
+offset_left = -496.0
+offset_top = -248.00003
+offset_right = -204.0
+offset_bottom = -199.00003
+scale = Vector2(5, 5)
+tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]

@@ -91,9 +91,16 @@ func perseguir_jugador():
 		else:
 			sprite.flip_h = true
 			$AttackHitbox.scale.x = -1
-		# Verificar si está lo suficientemente cerca para atacar
 
+#SECUENCIA DE ATAQUE
+#Tocar la atack hitbox
+func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
+	if body.is_in_group("player"):
+		jugador_ref_atack_hit = body
+		
+		estado_actual = Estado.ATACAR
 
+#En el match, se llama aqui
 func realizar_ataque():
 	velocity.x = 0
 	print("Atacando?", Atacando)
@@ -106,9 +113,13 @@ func realizar_ataque():
 		await sprite.animation_finished
 		
 		Atacando = false
-		estado_actual = Estado.PERSEGUIR #probar bien
+		if jugador_ref_atack_hit != null:
+			estado_actual = Estado.ATACAR
+		elif jugador_ref != null:
+			estado_actual = Estado.PERSEGUIR
+		else:
+			estado_actual = Estado.DEAMBULANDO
 
-# SECUENCIA DE ATAQUE
 # Señal que se activa cuando la animacion de ataque este completa.
 func _on_animated_sprite_2d_frame_changed() -> void:
 	if estado_actual == Estado.ATACAR and sprite.animation == "ataque": # tmb debe estar atacando
@@ -120,6 +131,7 @@ func _on_animated_sprite_2d_frame_changed() -> void:
 			print("ENTRO")
 			verificar_impacto_actual()
 
+#Verifica a que cuerpos les hace daño (para jugador no importa, pero sirve para muchos npc's)
 func verificar_impacto_actual():
 	# Comprobamos si el jugador sigue dentro de la hitbox de ataque
 	var cuerpos_en_rango = $AttackHitbox.get_overlapping_bodies() 
@@ -185,12 +197,6 @@ func choose(array):
 func choose_float(array):
 	array.shuffle()
 	return array.front()
-
-
-func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
-	if body.is_in_group("player"):
-		jugador_ref_atack_hit = body
-		estado_actual = Estado.ATACAR
 
 
 func _on_player_detection_zone_body_exited(body: Node2D) -> void:
