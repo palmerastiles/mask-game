@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cst7ee1m6wbu3"]
+
+[ext_resource type="Script" uid="uid://b653eae0flv7c" path="res://Codigo/Rayo.gd" id="1_f0sxe"]
+[ext_resource type="Texture2D" uid="uid://cykeycdqycs4k" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo0.png" id="2_4ryey"]
+[ext_resource type="Texture2D" uid="uid://drd3tfhqgvxkj" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo1.png" id="3_hs7ab"]
+[ext_resource type="Texture2D" uid="uid://dxuntctrctdyk" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo2.png" id="4_4pe4q"]
+[ext_resource type="Texture2D" uid="uid://2oe06fxg5s5j" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo3.png" id="5_7d1u6"]
+[ext_resource type="Texture2D" uid="uid://c0k7kofnsbu3w" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo4.png" id="6_2v0i6"]
+[ext_resource type="Texture2D" uid="uid://cte0itwk45u68" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo5.png" id="7_au5kh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tndtm"]
+size = Vector2(152, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wyada"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4ryey")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hs7ab")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4pe4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7d1u6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_2v0i6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_au5kh")
+}],
+"loop": true,
+"name": &"rayo",
+"speed": 5.0
+}]
+
+[node name="Area2D2" type="Area2D" unique_id=1110975951]
+visible = false
+script = ExtResource("1_f0sxe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1964725336]
+position = Vector2(396, 56)
+shape = SubResource("RectangleShape2D_tndtm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2029851300]
+position = Vector2(312.00003, -160)
+scale = Vector2(0.21599999, 0.42541808)
+sprite_frames = SubResource("SpriteFrames_wyada")
+animation = &"rayo"
+frame_progress = 0.8364275

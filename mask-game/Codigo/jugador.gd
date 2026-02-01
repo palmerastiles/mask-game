@@ -6,6 +6,7 @@ enum Estado {
 	Burla,
 	Dios 
 }
+
 signal health_changed #Señal para el addon de barra de vida
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]
@@ -115,21 +116,21 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 	# Aquí puedes añadir efectos específicos para cada máscara
 	match Mascara:
 		Estado.Sacrificio:
-			Animacion.modulate = Color(1, 1, 1)  # Color normal
+			
 			mult_daño_recibido = 1.5 # +50% daño recibido
 			print("MODO SACRIFICIO: Daño recibido x1.5")
 			$PjProtaMask1.visible = false
 			$Mask2.visible = false
 			$Mask3.visible = false
 		Estado.Ira:
-			Animacion.modulate = Color(1, 0.2, 0.2)  # Rojo
-			Daño_actual = Daño_base * 2.0 # Doble de daño
+			
+			Daño_actual = Daño_base * 2.0# Doble de daño
 			print("MODO IRA: Daño de ataque x2")
 			$PjProtaMask1.visible = true
 			$Mask2.visible = false
 			$Mask3.visible = false
 		Estado.Burla:
-			Animacion.modulate = Color(0.2, 1, 0.2)
+			
 			$PjProtaMask1.visible = false
 			$Mask2.visible = true
 			$Mask3.visible = false  # Verde
@@ -138,7 +139,7 @@ func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
 			print("MODO BURLA: Veloz pero débil")
 			
 		Estado.Dios:
-			Animacion.modulate = Color(1, 1, 0.2)
+			
 			$PjProtaMask1.visible = false
 			$Mask2.visible = false
 			$Mask3.visible = true  # Amarillo
@@ -222,7 +223,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		
 		
-	
+			
 	
 		
 	manejar_animaciones_suavizado()

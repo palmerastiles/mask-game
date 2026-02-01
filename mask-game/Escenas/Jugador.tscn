@@ -3,15 +3,23 @@
 [ext_resource type="Script" uid="uid://d4g8phbfrx7uo" path="res://Codigo/jugador.gd" id="1_pfvk3"]
 [ext_resource type="Texture2D" uid="uid://be2c44bjnqehw" path="res://Assets/pj prota iddle/sprite_prota_iddle0.png" id="2_8g85c"]
 [ext_resource type="Texture2D" uid="uid://dl2arjirxy736" path="res://Assets/pj prota caminata/sprite_prota_caminata0.png" id="2_1340j"]
+[ext_resource type="Texture2D" uid="uid://b4gyiy0rxklw0" path="res://Assets/efectos/ataque amarillo/sprite_ataque_amarillo0.png" id="2_jjne1"]
 [ext_resource type="Texture2D" uid="uid://dx5crnrny3pfh" path="res://Assets/pj prota caminata/sprite_prota_caminata1.png" id="3_g735c"]
 [ext_resource type="Texture2D" uid="uid://d2bhgb5f688hn" path="res://Assets/pj prota iddle/sprite_prota_iddle1.png" id="3_muoba"]
+[ext_resource type="Texture2D" uid="uid://dbhdoofg1dgbw" path="res://Assets/efectos/ataque amarillo/sprite_ataque_amarillo1.png" id="3_x5nqs"]
 [ext_resource type="Texture2D" uid="uid://cxbwccrbhp2rx" path="res://Assets/pj prota caminata/sprite_prota_caminata2.png" id="4_3le5i"]
 [ext_resource type="Texture2D" uid="uid://bywch02kr41si" path="res://Assets/pj prota iddle/sprite_prota_iddle2.png" id="4_fwv5a"]
+[ext_resource type="Texture2D" uid="uid://dof6di83ftsto" path="res://Assets/efectos/ataque verde/sprite_ataque_verde0.png" id="4_ny14v"]
+[ext_resource type="Texture2D" uid="uid://bukfg6000qt4r" path="res://Assets/efectos/ataque verde/sprite_ataque_verde1.png" id="5_b4gol"]
 [ext_resource type="Texture2D" uid="uid://bmq68xaq2v5w3" path="res://Assets/pj prota caminata/sprite_prota_caminata3.png" id="5_ldqfe"]
 [ext_resource type="Texture2D" uid="uid://bx7e8lokhyq1k" path="res://Assets/pj prota correr/sprite_prota_correr0.png" id="6_5d76g"]
+[ext_resource type="Texture2D" uid="uid://bk35tvh0ijdda" path="res://Assets/efectos/ataque verde/sprite_ataque_verde2.png" id="6_r4fmo"]
+[ext_resource type="Texture2D" uid="uid://cyehkuncglesh" path="res://Assets/efectos/ataque verde/sprite_ataque_verde3.png" id="7_bcn3v"]
 [ext_resource type="Texture2D" uid="uid://cic6txlm48cqb" path="res://Assets/pj prota correr/sprite_prota_correr1.png" id="7_sb2or"]
+[ext_resource type="Texture2D" uid="uid://u5ljgyaf514y" path="res://Assets/efectos/ataque verde/sprite_ataque_verde4.png" id="8_tndtm"]
 [ext_resource type="Texture2D" uid="uid://dxtpjtbpc6d8j" path="res://Assets/pj prota correr/sprite_prota_correr2.png" id="8_v8mjx"]
 [ext_resource type="Texture2D" uid="uid://7x7pkx563628" path="res://Assets/pj prota correr/sprite_prota_correr3.png" id="9_2c0fp"]
+[ext_resource type="Texture2D" uid="uid://nkx72jkmlume" path="res://Assets/efectos/ataque verde/sprite_ataque_verde5.png" id="9_7n0fy"]
 [ext_resource type="Texture2D" uid="uid://127o75wgjcov" path="res://Assets/pj prota salto/sprite_prota_salto0.png" id="13_q4s4l"]
 [ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/pj prota salto/sprite_prota_salto1.png" id="14_361ip"]
 [ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
@@ -26,6 +34,40 @@
 resource_local_to_scene = true
 resource_name = "Indio"
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_jjne1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_x5nqs")
+}],
+"loop": true,
+"name": &"Ataque burla",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ny14v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_b4gol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_r4fmo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_bcn3v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tndtm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_7n0fy")
+}],
+"loop": true,
+"name": &"Ataque ira",
+"speed": 12.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("16_31k2h")
@@ -95,11 +137,6 @@ animations = [{
 "loop": false,
 "name": &"Salto",
 "speed": 30.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"Suelo",
-"speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8g85c"]
@@ -115,15 +152,15 @@ script = ExtResource("1_pfvk3")
 Ira_Desbloqueada = true
 Burla_Desbloqueada = true
 Dios_Desbloqueada = true
-TIEMPO_MAX_USO = 31.36
-COOLDOWN_DURACION = 0.0
 metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
 position = Vector2(0.99999905, -15)
 scale = Vector2(0.17908657, 0.17908657)
 sprite_frames = SubResource("SpriteFrames_btktc")
-animation = &"Correr"
+animation = &"Idle"
+frame_progress = 0.5064081
 speed_scale = 0.7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
@@ -143,9 +180,10 @@ shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
-visible = false
+position = Vector2(0, -128)
 
 [node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
+script = null
 
 [node name="MenuMuerte" type="Control" parent="Camera2D/CanvasLayer" unique_id=1896111280]
 process_mode = 3
@@ -199,6 +237,8 @@ position = Vector2(0.3749979, -19.625)
 scale = Vector2(0.18118992, 0.18118992)
 texture = ExtResource("20_sb2or")
 metadata/_edit_group_ = true
+
+[node name="AtaqueTimer" type="Timer" parent="." unique_id=386825113]
 
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]

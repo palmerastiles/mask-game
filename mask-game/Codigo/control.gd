@@ -3,7 +3,7 @@ extends CanvasLayer  # Cambia de Control a CanvasLayer
 
 @onready var player = get_node("../Player")  # Ajusta la ruta según tu escena
 @onready var mask_icons = [
-	$PjProtaMask1,
+	$PjProtaMask1 ,
 	$Mask2,
 	$Mask3
 ]
@@ -15,7 +15,7 @@ extends CanvasLayer  # Cambia de Control a CanvasLayer
 
 func _ready():
 	# Si el CanvasLayer está en la misma escena que el jugador
-	player = get_parent().get_node("Player")  # Ajusta según tu estructura
+	player = get_parent().get_node(".")  # Ajusta según tu estructura
 
 func _process(_delta):
 	update_mask_display()
