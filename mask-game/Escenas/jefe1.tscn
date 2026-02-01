@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://cg6e8egvruqji"]
+
+[ext_resource type="Texture2D" uid="uid://dqydjychdcfg1" path="res://Assets/boss 1 ataque/sprite_boss3_ataque0.png" id="1_r7ucx"]
+[ext_resource type="Texture2D" uid="uid://bw0ftbqe1vl2l" path="res://Assets/boss 1 ataque/sprite_boss3_ataque1.png" id="2_xadv5"]
+[ext_resource type="Texture2D" uid="uid://cj25k4dle0lbg" path="res://Assets/boss 1 ataque/sprite_boss3_ataque2.png" id="3_rs48x"]
+[ext_resource type="Texture2D" uid="uid://c1botllgy3jpi" path="res://Assets/boss 1 ataque/sprite_boss3_ataque3.png" id="4_51568"]
+[ext_resource type="Texture2D" uid="uid://ddka2wfb0a1ie" path="res://Assets/boss 1 ataque/sprite_boss3_ataque4.png" id="5_bc4rg"]
+[ext_resource type="Texture2D" uid="uid://cbnt405wvmpwq" path="res://Assets/boss 1 ataque/sprite_boss3_ataque5.png" id="6_e6h38"]
+[ext_resource type="Texture2D" uid="uid://ce883j6764msc" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask0.png" id="7_iytqo"]
+[ext_resource type="Texture2D" uid="uid://dbtibrnrqdkem" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask1.png" id="8_kbdlq"]
+[ext_resource type="Texture2D" uid="uid://cdpw10lm0qvpr" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask2.png" id="9_edhrc"]
+[ext_resource type="Texture2D" uid="uid://qfdnybyx8pes" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask3.png" id="10_ba7rk"]
+[ext_resource type="Texture2D" uid="uid://bw4u8iyd800en" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask4.png" id="11_deebj"]
+[ext_resource type="Texture2D" uid="uid://do8fs8s4kaquj" path="res://Assets/boss 1 ataque mask/sprite_boss1_ataque mask5.png" id="12_0hmtd"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x6y4i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7ucx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_xadv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_rs48x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_51568")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bc4rg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_e6h38")
+}],
+"loop": true,
+"name": &"ataque_basico",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_iytqo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_kbdlq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_edhrc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ba7rk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_deebj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_0hmtd")
+}],
+"loop": true,
+"name": &"ataque_máscara",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6pthi"]
+radius = 140.0
+height = 700.0
+
+[node name="boss1" type="CharacterBody2D" unique_id=2034138345]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1913786496]
+position = Vector2(-129, -66)
+sprite_frames = SubResource("SpriteFrames_x6y4i")
+animation = &"ataque_basico"
+frame = 3
+frame_progress = 0.042518403
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=9413111]
+position = Vector2(13, -31)
+shape = SubResource("CapsuleShape2D_6pthi")
