@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://derhk4ux5eul7"]
+
+[ext_resource type="Texture2D" uid="uid://bb0gs7lq0etq0" path="res://Assets/background/fondo boss final capa 3.png" id="1_1rxu2"]
+[ext_resource type="Texture2D" uid="uid://dtcbjroj17vdl" path="res://Assets/background/fondo cementerio capa 2.png" id="2_3ebgi"]
+[ext_resource type="Texture2D" uid="uid://bxyyupf6o736x" path="res://Assets/background/fondo cementerio capa 1.png" id="3_gj2ox"]
+
+[node name="Node2D" type="Node2D" unique_id=108645520]
+
+[node name="FondoBossFinalCapa3" type="Sprite2D" parent="." unique_id=1799225320]
+position = Vector2(-6, 1)
+texture = ExtResource("1_1rxu2")
+
+[node name="FondoCementerioCapa2" type="Sprite2D" parent="FondoBossFinalCapa3" unique_id=1547747679]
+position = Vector2(-6, 141)
+scale = Vector2(1.0036364, 1)
+texture = ExtResource("2_3ebgi")
+
+[node name="FondoCementerioCapa1" type="Sprite2D" parent="FondoBossFinalCapa3/FondoCementerioCapa2" unique_id=1937776928]
+position = Vector2(4.9819336, 541)
+scale = Vector2(0.9963768, 1)
+texture = ExtResource("3_gj2ox")
