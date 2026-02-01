@@ -1,53 +1,69 @@
-[gd_scene format=3 uid="uid://cst7ee1m6wbu3"]
+[gd_scene format=3 uid="uid://b6g038yeip6j7"]
 
-[ext_resource type="Script" uid="uid://b653eae0flv7c" path="res://Codigo/Rayo.gd" id="1_f0sxe"]
-[ext_resource type="Texture2D" uid="uid://cykeycdqycs4k" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo0.png" id="2_4ryey"]
-[ext_resource type="Texture2D" uid="uid://drd3tfhqgvxkj" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo1.png" id="3_hs7ab"]
-[ext_resource type="Texture2D" uid="uid://dxuntctrctdyk" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo2.png" id="4_4pe4q"]
-[ext_resource type="Texture2D" uid="uid://2oe06fxg5s5j" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo3.png" id="5_7d1u6"]
-[ext_resource type="Texture2D" uid="uid://c0k7kofnsbu3w" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo4.png" id="6_2v0i6"]
-[ext_resource type="Texture2D" uid="uid://cte0itwk45u68" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo5.png" id="7_au5kh"]
+[ext_resource type="Script" uid="uid://bsifoicdkd1ru" path="res://Codigo/Rayo.gd" id="1_my46h"]
+[ext_resource type="Texture2D" uid="uid://cykeycdqycs4k" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo0.png" id="2_svj2t"]
+[ext_resource type="Texture2D" uid="uid://drd3tfhqgvxkj" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo1.png" id="3_1aos4"]
+[ext_resource type="Texture2D" uid="uid://dxuntctrctdyk" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo2.png" id="4_r7s4y"]
+[ext_resource type="Texture2D" uid="uid://2oe06fxg5s5j" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo3.png" id="5_6g6kk"]
+[ext_resource type="Texture2D" uid="uid://c0k7kofnsbu3w" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo4.png" id="6_nve1y"]
+[ext_resource type="Texture2D" uid="uid://cte0itwk45u68" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo5.png" id="7_xxb84"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tndtm"]
-size = Vector2(152, 20)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pxkt3"]
+radius = 40.0
+height = 400.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_wyada"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_4ryey")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_hs7ab")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_4pe4q")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_7d1u6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_2v0i6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_au5kh")
-}],
-"loop": true,
-"name": &"rayo",
-"speed": 5.0
-}]
+[sub_resource type="Animation" id="Animation_h7a5s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_svj2t")]
+}
 
-[node name="Area2D2" type="Area2D" unique_id=1110975951]
-visible = false
-script = ExtResource("1_f0sxe")
+[sub_resource type="Animation" id="Animation_g8pxd"]
+resource_name = "Rayo"
+length = 2.5714285
+step = 0.14285715
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.42857143, 0.85714287, 1.4285715, 1.7, 2, 2.4285715),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_svj2t"), ExtResource("3_1aos4"), ExtResource("4_r7s4y"), ExtResource("5_6g6kk"), ExtResource("6_nve1y"), ExtResource("7_xxb84"), null]
+}
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1964725336]
-position = Vector2(396, 56)
-shape = SubResource("RectangleShape2D_tndtm")
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a3457"]
+_data = {
+&"RESET": SubResource("Animation_h7a5s"),
+&"Rayo": SubResource("Animation_g8pxd")
+}
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2029851300]
-position = Vector2(312.00003, -160)
-scale = Vector2(0.21599999, 0.42541808)
-sprite_frames = SubResource("SpriteFrames_wyada")
-animation = &"rayo"
-frame_progress = 0.8364275
+[node name="Node2D" type="Node2D" unique_id=601802192]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=738430121]
+script = ExtResource("1_my46h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1120289453]
+position = Vector2(0, -176)
+rotation = 3.1415927
+shape = SubResource("CapsuleShape2D_pxkt3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1534420977]
+libraries/ = SubResource("AnimationLibrary_a3457")
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimationPlayer" unique_id=1546071249]
+position = Vector2(-120, -144)
+scale = Vector2(0.29733333, 0.29733333)
+texture = ExtResource("2_svj2t")

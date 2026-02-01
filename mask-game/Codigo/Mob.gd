@@ -1,213 +1,210 @@
 extends CharacterBody2D
 
-#class_name enemigoRenacido
+class_name EnemigoRenacido
 
-# Controla la velocidad base del enemigo
-const VELOCIDAD_NORMAL = 30
-const VELOCIDAD_PERSECUCION = 80
-const DISTANCIA_DETECCION = 200  # Píxeles a los que detecta al jugador
+# Constantes
+const VELOCIDAD_NORMAL := 30.0
+const VELOCIDAD_PERSECUCION := 80.0
+const DISTANCIA_DETECCION := 200.0
+const FRAME_IMPACTO_ATAQUE := 4
+const TIEMPOS_DEAMBULACION := [0.5, 1.0, 1.5]
 
-# Variables para controlar el hp del enemigo
-
-var vidaMaxima = 100
-var vida = vidaMaxima
-var vidaMinima = 0
-
-# Estados del enemigo
+# Estados
 enum Estado { DEAMBULANDO, PERSEGUIR, ATACAR, MUERTO }
-var estado_actual = Estado.DEAMBULANDO
 
-# Variables de daño y ataque
-var muerto: bool = false
-var daño = 10
-var Atacando: bool = false
-var daño_aplicado_en_este_ataque = false
+# Variables exportadas para fácil ajuste
+@export var vida_maxima := 100
+@export var dano_ataque := 10
+@export var fuerza_retroceso := 200.0
 
-# Variables de movimiento
-var direccion: Vector2 = Vector2.RIGHT
-var fuerzaRetroceso = 200
-var jugador_ref = null  # Referencia al jugador (cercania)
-var jugador_ref_atack_hit = null #Referencia al jugador (AttackHitbox)
+# Variables de estado
+var estado_actual := Estado.DEAMBULANDO
+var vida: int
+var muerto := false
+var atacando := false
+var dano_aplicado_en_este_ataque := false
 
-@onready var player_detection_zone = $PlayerDetectionZone  # Necesitarás un Area2D como hijo
-@onready var sprite = $AnimatedSprite2D # Asume que tienes un nodo Sprite2D
+# Referencias
+var jugador_ref: Node2D = null
+var direccion := Vector2.RIGHT
 
-func _ready():
-	# Iniciar el timer para cambiar dirección
-	$DirectionTimer.start()
-	$DirectionTimer.wait_time = choose_float([0.5, 1.0, 1.5])
-	
-	# Conectar señales si usas un Area2D para detección
+# Nodos
+@onready var sprite := $AnimatedSprite2D as AnimatedSprite2D
+@onready var player_detection_zone := $PlayerDetectionZone
+@onready var attack_hitbox := $AttackHitbox
+@onready var direction_timer := $DirectionTimer
+
+func _ready() -> void:
+	vida = vida_maxima
+	inicializar_conexiones()
+	iniciar_timer_deambulacion()
+
+func inicializar_conexiones() -> void:
 	if player_detection_zone:
-		player_detection_zone.body_entered.connect(_on_player_detection_zone_body_entered)
-		player_detection_zone.body_exited.connect(_on_player_detection_zone_body_exited)
+		player_detection_zone.body_entered.connect(_on_player_detected)
+		player_detection_zone.body_exited.connect(_on_player_lost)
+	
+	if sprite:
+		sprite.animation_finished.connect(_on_animacion_finalizada)
+		sprite.frame_changed.connect(_on_frame_cambiado)
+
+func iniciar_timer_deambulacion() -> void:
+	if direction_timer:
+		direction_timer.wait_time = elegir_aleatorio(TIEMPOS_DEAMBULACION)
+		direction_timer.start()
 
 func _physics_process(delta: float) -> void:
 	if muerto:
 		return
 	
-	# Aplicar gravedad
+	aplicar_gravedad(delta)
+	manejar_estado()
+	move_and_slide()
+	actualizar_direccion_sprite()
+
+func aplicar_gravedad(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	else:
 		velocity.y = 0
-	
-	# Manejar estados
+
+func manejar_estado() -> void:
 	match estado_actual:
 		Estado.DEAMBULANDO:
 			movimiento_deambulando()
 		Estado.PERSEGUIR:
 			perseguir_jugador()
 		Estado.ATACAR:
-			#PONER AQUI LA INICIALIZACION DE LA ANIMACION DE ATAQUE
 			realizar_ataque()
-	
-	# Aplicar movimiento
-	move_and_slide()
-	
-	# Actualizar dirección del sprite
-	#actualizar_direccion_sprite()
+		Estado.MUERTO:
+			# Comportamiento de muerte
+			pass
 
-func movimiento_deambulando():
-	# Movimiento aleatorio
+func movimiento_deambulando() -> void:
 	velocity.x = direccion.x * VELOCIDAD_NORMAL
-	if velocity.x > 1:
-		$AnimatedSprite2D.play("caminata")
+	if abs(velocity.x) > 1.0:
+		sprite.play("caminata")
 
-func perseguir_jugador():
-	if jugador_ref and not muerto:
-		# Calcular dirección hacia el jugador
-		var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
-		
-		# Mover hacia el jugador
-		velocity.x = direccion_hacia_jugador.x * VELOCIDAD_PERSECUCION
-		
-		# Actualizar dirección para el sprite
-		direccion.x = sign(direccion_hacia_jugador.x)
-		sprite.play("correr")
-		if direccion.x > 0:
-			sprite.flip_h = false
-			$AttackHitbox.scale.x = 1
-		else:
-			sprite.flip_h = true
-			$AttackHitbox.scale.x = -1
+func perseguir_jugador() -> void:
+	if not jugador_ref:
+		estado_actual = Estado.DEAMBULANDO
+		return
+	
+	var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
+	velocity.x = direccion_hacia_jugador.x * VELOCIDAD_PERSECUCION
+	
+	sprite.play("correr")
+	actualizar_orientacion(direccion_hacia_jugador.x)
 
-#SECUENCIA DE ATAQUE
-#Tocar la atack hitbox
-func _on_attack_hitbox_body_entered(body: Node2D) -> void: #Establecer hitbox en un frame especifico de la animacion
-	if body.is_in_group("player"):
-		jugador_ref_atack_hit = body
-		
-		estado_actual = Estado.ATACAR
-
-#En el match, se llama aqui
-func realizar_ataque():
+func realizar_ataque() -> void:
 	velocity.x = 0
-	print("Atacando?", Atacando)
-	print("Daño",daño_aplicado_en_este_ataque)
-	if not Atacando: # Usamos tu variable para saber si ya empezó la animación
-		daño_aplicado_en_este_ataque = false
-		sprite.play("ataque")
-		Atacando = true
-		# Esperamos a que la animación termine para volver a perseguir
-		await sprite.animation_finished
-		
-		Atacando = false
-		if jugador_ref_atack_hit != null:
-			estado_actual = Estado.ATACAR
-		elif jugador_ref != null:
-			estado_actual = Estado.PERSEGUIR
-		else:
-			estado_actual = Estado.DEAMBULANDO
-
-# Señal que se activa cuando la animacion de ataque este completa.
-func _on_animated_sprite_2d_frame_changed() -> void:
-	if estado_actual == Estado.ATACAR and sprite.animation == "ataque": # tmb debe estar atacando
-		
-		var frame_de_impacto = 4 #Lanza completamente estirada
-		
-		#If para evitar que se efectue daño continuamente
-		if sprite.frame == frame_de_impacto and not daño_aplicado_en_este_ataque: 
-			print("ENTRO")
-			verificar_impacto_actual()
-
-#Verifica a que cuerpos les hace daño (para jugador no importa, pero sirve para muchos npc's)
-func verificar_impacto_actual():
-	# Comprobamos si el jugador sigue dentro de la hitbox de ataque
-	var cuerpos_en_rango = $AttackHitbox.get_overlapping_bodies() 
 	
-	for cuerpo in cuerpos_en_rango:
-		if cuerpo.is_in_group("player"):
-			cuerpo.recibir_daño(daño)
-			daño_aplicado_en_este_ataque = true # Evita doble daño en el mismo golpe
-			print("¡El enemigo te ha golpeado en el frame ", sprite.frame, "!")
+	if not atacando:
+		iniciar_ataque()
 
-func _on_direction_timer_timeout():
-	if estado_actual == Estado.DEAMBULANDO and not muerto:
-		cambio_direccion_aleatoria()
-		$DirectionTimer.wait_time = choose_float([0.5, 1.0, 1.5])
-		$DirectionTimer.start()
+func iniciar_ataque() -> void:
+	dano_aplicado_en_este_ataque = false
+	sprite.play("ataque")
+	atacando = true
 
-func cambio_direccion_aleatoria():
-	# Cambiar dirección aleatoriamente
-	direccion.x = choose([-1, 1])
+func finalizar_ataque() -> void:
+	atacando = false
 	
-	# También puedes agregar pequeñas pausas
-	if randf() < 0.3:  # 30% de probabilidad de detenerse brevemente
+	if jugador_ref:
+		estado_actual = Estado.PERSEGUIR
+	else:
+		estado_actual = Estado.DEAMBULANDO
+
+func _on_animacion_finalizada() -> void:
+	if sprite.animation == "ataque":
+		finalizar_ataque()
+
+func _on_frame_cambiado() -> void:
+	if estado_actual != Estado.ATACAR or sprite.animation != "ataque":
+		return
+	
+	if sprite.frame == FRAME_IMPACTO_ATAQUE and not dano_aplicado_en_este_ataque:
+		procesar_impacto()
+
+func procesar_impacto() -> void:
+	for cuerpo in attack_hitbox.get_overlapping_bodies():
+		if cuerpo.is_in_group("player") and cuerpo.has_method("recibir_dano"):
+			cuerpo.recibir_dano(dano_ataque)
+			dano_aplicado_en_este_ataque = true
+			print("¡Golpe conectado en frame ", sprite.frame, "!")
+
+func actualizar_orientacion(direccion_x: float) -> void:
+	if direccion_x == 0:
+		return
+	
+	sprite.flip_h = direccion_x < 0
+	attack_hitbox.scale.x = -1 if direccion_x < 0 else 1
+
+func actualizar_direccion_sprite() -> void:
+	if estado_actual != Estado.DEAMBULANDO or velocity.x == 0:
+		return
+	
+	sprite.flip_h = velocity.x < 0
+
+func _on_direction_timer_timeout() -> void:
+	if estado_actual != Estado.DEAMBULANDO or muerto:
+		return
+	
+	cambiar_direccion_aleatoria()
+	direction_timer.wait_time = elegir_aleatorio(TIEMPOS_DEAMBULACION)
+	direction_timer.start()
+
+func cambiar_direccion_aleatoria() -> void:
+	direccion.x = elegir_aleatorio([-1, 1])
+	
+	if randf() < 0.3:  # 30% de probabilidad de detenerse
 		velocity.x = 0
 	else:
 		velocity.x = direccion.x * VELOCIDAD_NORMAL
 
-func actualizar_direccion_sprite():
-	# Voltear sprite según dirección
-	if direccion.x > 0:
-		sprite.flip_h = false
-	elif direccion.x < 0:
-		sprite.flip_h = true
-
-func recibir_daño(cantidad):
+func recibir_dano(cantidad: int) -> void:
 	if muerto:
 		return
 	
 	vida -= cantidad
-	print("Enemigo recibió ", cantidad, " de daño. Vida restante: ", vida)
+	print("Enemigo recibió ", cantidad, " de daño. Vida: ", vida)
 	
 	# Efecto visual de daño
-	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.1).timeout
-	sprite.modulate = Color.WHITE
+	efecto_dano()
 	
 	if vida <= 0:
 		morir()
 
-func morir():
+func efecto_dano() -> void:
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.1).timeout
+	sprite.modulate = Color.WHITE
+
+func morir() -> void:
 	muerto = true
 	estado_actual = Estado.MUERTO
 	velocity = Vector2.ZERO
-	set_collision_layer_value(1, false)  # Desactivar colisión
+	set_collision_layer_value(1, false)
 	set_collision_mask_value(1, false)
-	# Animación de muerte
-	print("Enemigo muerto")
-	# queue_free() después de animación si es necesario
+	print("Enemigo eliminado")
 
-func choose(array):
-	array.shuffle()
-	return array.front()
+func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		estado_actual = Estado.ATACAR
 
-func choose_float(array):
-	array.shuffle()
-	return array.front()
+func _on_player_detected(body: Node2D) -> void:
+	if body.is_in_group("player") and not muerto:
+		jugador_ref = body
+		estado_actual = Estado.PERSEGUIR
+		print("¡Jugador detectado!")
 
-
-func _on_player_detection_zone_body_exited(body: Node2D) -> void:
+func _on_player_lost(body: Node2D) -> void:
 	if body == jugador_ref:
 		jugador_ref = null
 		estado_actual = Estado.DEAMBULANDO
 		print("Jugador perdido")
 
-
-func _on_player_detection_zone_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player") and not muerto:
-		jugador_ref = body
-		estado_actual = Estado.PERSEGUIR
-		print("¡Jugador detectado!")
+# Utilidades
+func elegir_aleatorio(array: Array):
+	array.shuffle()
+	return array[0] if array else null

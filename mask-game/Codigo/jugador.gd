@@ -1,379 +1,289 @@
 extends CharacterBody2D
 
 enum Estado { 
-	Sacrificio,
-	Ira,
-	Burla,
-	Dios 
+	SACRIFICIO,
+	IRA,
+	BURLA,
+	DIOS 
 }
 
-signal health_changed #Señal para el addon de barra de vida
-var Actual = Estado.Sacrificio
-var Desbloqueada = [Estado.Sacrificio]
-var Rotacion = []
-@export var Vida_Maxima := 100
-@export var Daño_base = 10
-var Daño_actual = Daño_base
-@export var mult_daño_recibido = 1.0
-@onready var Vida_Actual = Vida_Maxima
-@onready var Animacion = $AnimatedSprite2D
-@onready var menu_muerte = $Camera2D/CanvasLayer/MenuMuerte
-@export var Ira_Desbloqueada = false
-@export var Burla_Desbloqueada = false
-@export var Dios_Desbloqueada = false
+signal health_changed
+signal mask_changed(mask_name: String)
+signal mask_cooldown_updated(mask: Estado, cooldown: float)
 
+const BASE_SPEED := 300.0
+const BASE_JUMP_VELOCITY := -600.0
+const BASE_DAMAGE := 10
 
-var SPEED = 300.0
-var JUMP_VELOCITY = -600.0
+@export var vida_maxima := 100
+@export var tiempo_max_uso_mascara := 5.0
+@export var cooldown_duracion := 10.0
 
-#Tiempo de uso y cooldowns para las mascaras
-@export var TIEMPO_MAX_USO = 5.0  # Tiempo de uso de mascara (igual pa toos)
-@export var COOLDOWN_DURACION = 10.0
+var actual := Estado.SACRIFICIO
+var desbloqueadas := [Estado.SACRIFICIO]
+var rotacion := []
+var vida_actual: int
+var daño_actual = BASE_DAMAGE
+var mult_daño_recibido := 1.0
+var speed := BASE_SPEED
+var jump_velocity := BASE_JUMP_VELOCITY
+var ataque := false
+var tiempo_uso_restante := 0.0
+var esta_usando_mascara := false
 
-var tiempo_uso_restante = 0.0
-var esta_usando_mascara = false #??
-
-# Cooldowns independientes de mascaras
-var cooldowns = {
-	Estado.Sacrificio: 0.0,
-	Estado.Ira: 0.0,
-	Estado.Burla: 0.0,
-	Estado.Dios: 0.0
+var cooldowns := {
+	Estado.SACRIFICIO: 0.0,
+	Estado.IRA: 0.0,
+	Estado.BURLA: 0.0,
+	Estado.DIOS: 0.0
 }
 
+@onready var animacion := $AnimatedSprite2D
+@onready var menu_muerte := $Camera2D/CanvasLayer/MenuMuerte
+@onready var mascaras := {
+	Estado.SACRIFICIO: null,
+	Estado.IRA: $PjProtaMask1,
+	Estado.BURLA: $Mask2,
+	Estado.DIOS: $Mask3
+}
 
 func _ready() -> void:
-	$HealthBar2D.initialize("health_changed", Vida_Actual)
-	Update_Mascara_Desbloqueada()
-	Update_Rotacion()
-	if Rotacion.size() > 0:
-		Actual = Rotacion[0]
-		Equipar_Mascara(Actual)  # Corregido: llamar a la función
+	vida_actual = vida_maxima
+	$HealthBar2D.initialize("health_changed", vida_actual)
+	actualizar_mascaras_desbloqueadas()
+	actualizar_rotacion()
+	if rotacion.size() > 0:
+		actual = rotacion[0]
+		equipar_mascara(actual)
+		actualizar_visibilidad_mascaras()
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Cambio_F"):
 		ciclo_mascara(1)
 	elif event.is_action_pressed("Cambio_B"): 
 		ciclo_mascara(-1)
+	elif event.is_action_pressed("Ataque") and actual == Estado.BURLA:
+		ataque = true
 
-func ciclo_mascara(direccion: int):  # Corregido: agregar dos puntos y tipo
-	if Rotacion.size() <= 1:
-		return  # na
-	
-	var valor_actual = Rotacion.find(Actual)  # Corregido: usar guión bajo, no espacio
-	
-	if valor_actual == -1: #Si no encuentra na
-		valor_actual = 0
-	
-	var nuevo_valor = (valor_actual + direccion) % Rotacion.size()  # Anillo
-	if nuevo_valor < 0:
-		nuevo_valor = Rotacion.size() - 1
-	
-	var Mascara_seleccionada = Rotacion[nuevo_valor]
-	Equipar_Mascara(Mascara_seleccionada)  # Corregido: punto y coma separado
-
-func Equipar_Mascara(Mascara: Estado):  # Corregido: tipo Estado
-	"""
-	Actual = Mascara
-	print("Máscara equipada: ", Estado.keys()[Mascara])  # Corregido: sintaxis
-	#Toca cambiarlo
-	
-	#Dado que rotacion se actualiza de desbloqueadas, nunca habra una mascara 
-	sin desbloquear en el mismo
-	
-	# 1. Si la máscara está bloqueada, no hacer nada 
-	if Mascara not in Desbloqueada:
-		print("Acceso denegado: Máscara bloqueada.")
+func ciclo_mascara(direccion: int) -> void:
+	if rotacion.size() <= 1:
 		return
-	"""
+	
+	var indice_actual = rotacion.find(actual)
+	if indice_actual == -1:
+		indice_actual = 0
+	
+	var nuevo_indice = (indice_actual + direccion) % rotacion.size()
+	if nuevo_indice < 0:
+		nuevo_indice = rotacion.size() - 1
+	
+	var mascara_seleccionada = rotacion[nuevo_indice]
+	equipar_mascara(mascara_seleccionada)
 
-	# Si la máscara tiene cooldown activo, no permitir cambio
-	if cooldowns[Mascara] > 0:
-		print("¡Mascara ", Estado.keys()[Mascara], " en cooldown! Faltan: ", snapped(cooldowns[Mascara], 0.1), "s")
+func equipar_mascara(mascara: Estado) -> void:
+	if cooldowns[mascara] > 0:
+		print("¡Mascara ", Estado.keys()[mascara], " en cooldown! Faltan: ", snapped(cooldowns[mascara], 0.1), "s")
 		return
 
-	# QUITAR mascara antes de terminar (entra en cooldown)
-	# (Excepto la de Sacrificio)
-	if Actual != Mascara and Actual != Estado.Sacrificio:
-		print("Quitando ", Estado.keys()[Actual], ". Cooldown iniciado")
-		cooldowns[Actual] = COOLDOWN_DURACION
+	# Quitar mascara anterior (excepto sacrificio)
+	if actual != mascara and actual != Estado.SACRIFICIO:
+		print("Quitando ", Estado.keys()[actual], ". Cooldown iniciado")
+		cooldowns[actual] = cooldown_duracion
+		mask_cooldown_updated.emit(actual, cooldown_duracion)
 	
-	# 4. LÓGICA DE ENTRADA: Equipar la nueva
-	if Mascara == Estado.Sacrificio: # Para que no le aparezca cooldown a sacrificio 
-		print("Equipada: ", Estado.keys()[Mascara])
-	else:
-		print("Equipada: ", Estado.keys()[Mascara], " | Tiempo de uso: ", TIEMPO_MAX_USO, "s")
-	Actual = Mascara
-	tiempo_uso_restante = TIEMPO_MAX_USO # Reiniciamos el tiempo de uso global
-	esta_usando_mascara = (Actual != Estado.Sacrificio) # Sacrificio no gasta tiempo
+	# Resetear estadísticas
+	resetear_estadisticas()
 	
-	# RESETEAMOS ESTADISTICAS BASE ANTES DE APLICAR MODIFICADORES DE LAS MASCARAS
-	SPEED = 300.0
-	JUMP_VELOCITY = -600.0
-	Daño_actual = Daño_base
+	# Aplicar efectos de la nueva máscara
+	aplicar_efectos_mascara(mascara)
+	
+	# Actualizar estado
+	actual = mascara
+	tiempo_uso_restante = tiempo_max_uso_mascara
+	esta_usando_mascara = (actual != Estado.SACRIFICIO)
+	
+	actualizar_visibilidad_mascaras()
+	mask_changed.emit(Estado.keys()[actual])
+
+func resetear_estadisticas() -> void:
+	speed = BASE_SPEED
+	jump_velocity = BASE_JUMP_VELOCITY
+	daño_actual = BASE_DAMAGE
 	mult_daño_recibido = 1.0
-	self.scale = Vector2(1, 1) # ESTA SERA LA ESCALA POR DEFECTO
+	scale = Vector2.ONE
 
-	# Aquí puedes añadir efectos específicos para cada máscara
-	match Mascara:
-		Estado.Sacrificio:
-			
-			mult_daño_recibido = 1.5 # +50% daño recibido
+func aplicar_efectos_mascara(mascara: Estado) -> void:
+	match mascara:
+		Estado.SACRIFICIO:
+			mult_daño_recibido = 1.5
 			print("MODO SACRIFICIO: Daño recibido x1.5")
-			$PjProtaMask1.visible = false
-			$Mask2.visible = false
-			$Mask3.visible = false
-		Estado.Ira:
-			
-			Daño_actual = Daño_base * 2.0# Doble de daño
+		
+		Estado.IRA:
+			daño_actual = BASE_DAMAGE * 2.0
 			print("MODO IRA: Daño de ataque x2")
-			$PjProtaMask1.visible = true
-			$Mask2.visible = false
-			$Mask3.visible = false
-		Estado.Burla:
-			
-			$PjProtaMask1.visible = false
-			$Mask2.visible = true
-			$Mask3.visible = false  # Verde
-			SPEED = 600.0 # Doble de velocidad
-			Daño_actual = Daño_base * 0.5 # 50% menos de daño
+		
+		Estado.BURLA:
+			speed = 600.0
+			daño_actual = BASE_DAMAGE * 0.5
 			print("MODO BURLA: Veloz pero débil")
-			
-		Estado.Dios:
-			
-			$PjProtaMask1.visible = false
-			$Mask2.visible = false
-			$Mask3.visible = true  # Amarillo
-			mult_daño_recibido = 0.5 # -50% daño recibido
-			SPEED = 150.0 # -50% Speed
-			self.scale = Vector2(1.3, 1.3) # Se hace mas grande
+		
+		Estado.DIOS:
+			mult_daño_recibido = 0.5
+			speed = 150.0
+			scale = Vector2(1.3, 1.3)
 			print("MODO DIOS: Tanque lento")
-			
-	
-	
-	
-#FUNCION A LLAMAR AL RECIBIR DAÑO (MAÑO)
-func recibir_daño(cantidad: int):
-	var daño_final = cantidad * mult_daño_recibido
-	Vida_Actual -= daño_final
-	emit_signal("health_changed", Vida_Actual)
-	print("Recibiste ", daño_final, " de daño. Vida restante: ", Vida_Actual)
-	
-	# Efecto Sacrificio:
-	if Actual == Estado.Sacrificio:
-		# Si te pegan en Sacrificio, reduces cooldown de las demás 2 segundos
-		for m in cooldowns:
-			if cooldowns[m] > 0: #Bajar 2s a todos los que tengan cooldown activo
-				cooldowns[m] -= 2.0
-				if cooldowns[m] <= 0: #Resetear a 0 el cooldown en caso de valores negativos
-					cooldowns[m] = 0
-		print("¡Sacrificio aceptado! Cooldowns reducidos.")
 
-	if Vida_Actual <= 0:
-		#morir() 
-		pass
+func actualizar_visibilidad_mascaras() -> void:
+	for estado in mascaras:
+		var nodo = mascaras[estado]
+		if nodo:
+			nodo.visible = (estado == actual)
 
-func morir():
-	# En lugar de reiniciar instantáneamente, pausamos el juego y mostramos el menú
+func rayo() -> void:
+	if ataque and actual == Estado.BURLA:
+		animacion.play("AtaqueBurla")
+		print("Ataque de burla")
+
+func recibir_daño(cantidad: int) -> void:
+	var daño_final = int(cantidad * mult_daño_recibido)
+	vida_actual -= daño_final
+	health_changed.emit(vida_actual)
+	print("Recibiste ", daño_final, " de daño. Vida restante: ", vida_actual)
+	
+	if actual == Estado.SACRIFICIO:
+		reducir_cooldowns_por_sacrificio()
+	
+	if vida_actual <= 0:
+		morir()
+
+func reducir_cooldowns_por_sacrificio() -> void:
+	for estado in cooldowns:
+		if cooldowns[estado] > 0:
+			cooldowns[estado] = max(0, cooldowns[estado] - 2.0)
+	print("¡Sacrificio aceptado! Cooldowns reducidos.")
+
+func morir() -> void:
 	print("El jugador ha muerto.")
 	menu_muerte.visible = true
-	get_tree().paused = true # Pausa la física y el movimiento
-	# Importante: El Process Mode del MenuMuerte debe ser "Always" en el Inspector??
+	get_tree().paused = true
 
+func actualizar_mascaras_desbloqueadas() -> void:
+	desbloqueadas = [Estado.SACRIFICIO]
+	# Estas variables deberían ser reemplazadas por un sistema de progreso
+	if true:  # Ejemplo: condición para Ira
+		desbloqueadas.append(Estado.IRA)
+	if true:  # Ejemplo: condición para Burla
+		desbloqueadas.append(Estado.BURLA)
+	if true:  # Ejemplo: condición para Dios
+		desbloqueadas.append(Estado.DIOS)
 
-
-func Update_Mascara_Desbloqueada():
-	Desbloqueada = [Estado.Sacrificio]  # Siempre empieza con Sacrificio
-	
-	if Ira_Desbloqueada:
-		Desbloqueada.append(Estado.Ira)
-	if Burla_Desbloqueada:
-		Desbloqueada.append(Estado.Burla)
-	if Dios_Desbloqueada:
-		Desbloqueada.append(Estado.Dios)
-
-func Update_Rotacion():
-	Rotacion = Desbloqueada.duplicate()
-	# Opcional: si quieres que siempre empiece con Sacrificio, déjalo así
-	# Si prefieres que el ciclo no incluya Sacrificio cuando hay otras:
-	# if Rotacion.size() > 1:
-	#     Rotacion.erase(Estado.Sacrificio)
+func actualizar_rotacion() -> void:
+	rotacion = desbloqueadas.duplicate()
 
 func _physics_process(delta: float) -> void:
-	# Tiempos para mascaras
 	procesar_tiempos(delta)
-	# Gravedad
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
-	# Salto
-	if Input.is_action_just_pressed("Salto") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		
 	
-
-	# Movimiento horizontal
+	if Input.is_action_just_pressed("Salto") and is_on_floor():
+		velocity.y = jump_velocity
+	
 	var direction := Input.get_axis("Izquierda", "Derecha")
 	if direction:
-		velocity.x = direction * SPEED
-		
-		Animacion.flip_h = direction < 0
-		$PjProtaMask1.flip_h = direction < 0
-		$Mask2.flip_h = direction < 0
-		$Mask3.flip_h = direction < 0
+		velocity.x = direction * speed
+		animacion.flip_h = direction < 0
+		for nodo in mascaras.values():
+			if nodo:
+				nodo.flip_h = direction < 0
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		
-		
-			
+		velocity.x = move_toward(velocity.x, 0, speed)
 	
-		
-	manejar_animaciones_suavizado()
-		
+	manejar_animaciones()
 	move_and_slide()
-func manejar_animaciones_suavizado():
+
+func manejar_animaciones() -> void:
 	var en_suelo = is_on_floor()
 	var velocidad_y = velocity.y
 	
-	# Transición suave entre animaciones
-	if not en_suelo:
-		if velocidad_y < -50:  # Subiendo rápidamente
-			if Animacion.animation != "Salto":
-				Animacion.play("Salto")
-		elif velocidad_y > 50:  # Cayendo rápidamente
-			if Animacion.animation != "Caida":
-				Animacion.play("Caida")
-	else:
-		if abs(velocity.x) > 0:  # Si hay movimiento horizontal
-			# Verificar si está usando Burla y tiene velocidad 600
-			if Actual == Estado.Burla and SPEED == 600:
-				if Animacion.animation != "Caminata":
-					Animacion.play("Caminata")
-					Animacion.speed_scale = 3.0
-
-			else:
-				# Para otras máscaras o cuando no es Burla
-				if Animacion.animation != "Caminata":
-					Animacion.play("Caminata")
-				Animacion.speed_scale = 1.0  # Velocidad normal de animación
-		else:
-			# Sin movimiento
-			if Animacion.animation != "Idle":
-				Animacion.play("Idle")
-			Animacion.speed_scale = 1.0
-
-# Versión alternativa más simple:
-func manejar_animaciones_simple():
-	var en_suelo = is_on_floor()
-	var velocidad_y = velocity.y
-	
-	if not en_suelo:
-		if velocidad_y < 0:
-			Animacion.play("Salto")
-		else:
-			Animacion.play("Caida")
+	if ataque and actual == Estado.BURLA:
+		if animacion.animation != "AtaqueBurla":
+			animacion.play("AtaqueBurla")
+		return
+	if ataque and actual == Estado.IRA:
+		if animacion.animation != "AtaqueIra":
+			animacion.play("AtaqueIra")
 		return
 	
-	# En el suelo
-	if abs(velocity.x) > 0:
-		# Con Burla y velocidad 600, usar animación "Correr"
-		if Actual == Estado.Burla and SPEED == 600:
-			if Animacion.has_animation("Correr"):
-				Animacion.play("Correr")
-			else:
-				Animacion.play("Caminata")
-				Animacion.speed_scale = 1.5  # Animación más rápida
-		else:
-			Animacion.play("Caminata")
-			Animacion.speed_scale = 1.0
-	else:
-		Animacion.play("Idle")
-		Animacion.speed_scale = 1.0
-
-# Versión con mejor manejo de transiciones:
-func manejar_animaciones_mejorado():
-	var en_suelo = is_on_floor()
-	var velocidad_y = velocity.y
-	var movimiento_horizontal = abs(velocity.x) > 10
-	
-	# Manejar animaciones en el aire
 	if not en_suelo:
-		if velocidad_y < 0:
-			Animacion.play("Salto")
-		else:
-			Animacion.play("Caida")
-		return
-	
-	# Manejar animaciones en el suelo
-	if movimiento_horizontal:
-		# Verificar si está corriendo (Burla con velocidad alta)
-		var esta_corriendo = (Actual == Estado.Burla and SPEED >= 600)
-		
-		if esta_corriendo:
-			# Priorizar animación "Correr"
-			if Animacion.has_animation("Correr"):
-				Animacion.play("Correr")
-				# Ajustar velocidad de animación según la velocidad real
-				Animacion.speed_scale = clamp(abs(velocity.x) / 600.0, 1.0, 1.5)
-			else:
-				# Fallback a "Caminata" rápida
-				Animacion.play("Caminata")
-				Animacion.speed_scale = 1.5
-		else:
-			# Caminata normal
-			Animacion.play("Caminata")
-			Animacion.speed_scale = 1.0
+		if velocidad_y < -50:
+			if animacion.animation != "Salto":
+				animacion.play("Salto")
+		elif velocidad_y > 50:
+			if animacion.animation != "Caida":
+				animacion.play("Caida")
 	else:
-		Animacion.play("Idle")
-		Animacion.speed_scale = 1.0
+		if abs(velocity.x) > 0:
+			if animacion.animation != "Caminata":
+				animacion.play("Caminata")
+			animacion.speed_scale = 3.0 if (actual == Estado.BURLA and speed == 600) else 1.0
+		else:
+			if animacion.animation != "Idle":
+				animacion.play("Idle")
+			animacion.speed_scale = 1.0
 
-#Funcion para tiempos de mascaras
-func procesar_tiempos(delta: float):
-	# Reducir todos los cooldowns
-	for m in cooldowns:
-		if cooldowns[m] > 0:
-			cooldowns[m] -= delta
-			if cooldowns[m] <= 0: #Cooldown acabado
-				cooldowns[m] = 0
-				print("Mascara ", Estado.keys()[m], " lista para usar de nuevo.")
-
-	# Reducir tiempo actual
+func procesar_tiempos(delta: float) -> void:
+	# Reducir cooldowns
+	for estado in cooldowns:
+		if cooldowns[estado] > 0:
+			cooldowns[estado] -= delta
+			if cooldowns[estado] <= 0:
+				cooldowns[estado] = 0
+				print("Máscara ", Estado.keys()[estado], " lista para usar de nuevo.")
+	
+	# Reducir tiempo de uso
 	if esta_usando_mascara:
 		tiempo_uso_restante -= delta
 		if tiempo_uso_restante <= 0:
 			print("¡Tiempo agotado! Volviendo a Sacrificio.")
-			Equipar_Mascara(Estado.Sacrificio) #Forzar sacrificio
+			equipar_mascara(Estado.SACRIFICIO)
 
-	
-# Función para desbloquear máscaras desde otros lugares del juego
-func Desbloquear_Ira():
-	Ira_Desbloqueada = true
-	Update_Mascara_Desbloqueada()
-	Update_Rotacion()
-	print("Máscara Ira desbloqueada!")
-
-func Desbloquear_Burla():
-	Burla_Desbloqueada = true
-	Update_Mascara_Desbloqueada()
-	Update_Rotacion()
-	print("Máscara Burla desbloqueada!")
-
-func Desbloquear_Dios():
-	Dios_Desbloqueada = true
-	Update_Mascara_Desbloqueada()
-	Update_Rotacion()
-	print("Máscara Dios desbloqueada!")
-
-# Método helper para obtener nombre actual
-func Obtener_Mascara_Actual() -> String:
-	return Estado.keys()[Actual]
-
+func obtener_mascara_actual() -> String:
+	return Estado.keys()[actual]
 
 func _on_retry_bttn_pressed() -> void:
-	get_tree().paused = false # Quitamos la pausa
-	get_tree().reload_current_scene() # Reiniciamos el nivel
-
+	get_tree().paused = false
+	get_tree().reload_current_scene()
 
 func _on_menu_bttn_pressed() -> void:
 	get_tree().paused = false
-	print("Cambiando a Menú Principal (Pendiente de implementar)")
-	# Aquí irá: get_tree().change_scene_to_file("res://escenas/menu.tscn")
+	print("Cambiando a Menú Principal")
+	# get_tree().change_scene_to_file("res://escenas/menu.tscn")
+# AL FINAL DEL SCRIPT DEL JUGADOR, después de _on_menu_bttn_pressed()
+
+# --- Sistema de desbloqueo mejorado ---
+func desbloquear_mascara(mascara: Estado) -> void:
+	if mascara not in desbloqueadas:
+		desbloqueadas.append(mascara)
+		actualizar_rotacion()
+		print("¡Máscara ", Estado.keys()[mascara], " desbloqueada!")
+
+# Funciones específicas (snake_case - convención GDScript)
+func desbloquear_ira() -> void:
+	desbloquear_mascara(Estado.IRA)
+
+func desbloquear_burla() -> void:
+	desbloquear_mascara(Estado.BURLA)
+
+func desbloquear_dios() -> void:
+	desbloquear_mascara(Estado.DIOS)
+
+# Funciones legacy (PascalCase - compatibilidad con código existente)
+func Desbloquear_Ira() -> void:
+	desbloquear_ira()
+
+func Desbloquear_Burla() -> void:
+	desbloquear_burla()
+
+func Desbloquear_Dios() -> void:
+	desbloquear_dios()

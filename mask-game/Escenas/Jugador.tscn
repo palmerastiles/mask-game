@@ -1,38 +1,90 @@
 [gd_scene format=3 uid="uid://bvoudkk742e0b"]
 
 [ext_resource type="Script" uid="uid://d4g8phbfrx7uo" path="res://Codigo/jugador.gd" id="1_pfvk3"]
-[ext_resource type="Texture2D" uid="uid://be2c44bjnqehw" path="res://Assets/pj prota iddle/sprite_prota_iddle0.png" id="2_8g85c"]
-[ext_resource type="Texture2D" uid="uid://dl2arjirxy736" path="res://Assets/pj prota caminata/sprite_prota_caminata0.png" id="2_1340j"]
 [ext_resource type="Texture2D" uid="uid://b4gyiy0rxklw0" path="res://Assets/efectos/ataque amarillo/sprite_ataque_amarillo0.png" id="2_jjne1"]
-[ext_resource type="Texture2D" uid="uid://dx5crnrny3pfh" path="res://Assets/pj prota caminata/sprite_prota_caminata1.png" id="3_g735c"]
-[ext_resource type="Texture2D" uid="uid://d2bhgb5f688hn" path="res://Assets/pj prota iddle/sprite_prota_iddle1.png" id="3_muoba"]
 [ext_resource type="Texture2D" uid="uid://dbhdoofg1dgbw" path="res://Assets/efectos/ataque amarillo/sprite_ataque_amarillo1.png" id="3_x5nqs"]
-[ext_resource type="Texture2D" uid="uid://cxbwccrbhp2rx" path="res://Assets/pj prota caminata/sprite_prota_caminata2.png" id="4_3le5i"]
-[ext_resource type="Texture2D" uid="uid://bywch02kr41si" path="res://Assets/pj prota iddle/sprite_prota_iddle2.png" id="4_fwv5a"]
 [ext_resource type="Texture2D" uid="uid://dof6di83ftsto" path="res://Assets/efectos/ataque verde/sprite_ataque_verde0.png" id="4_ny14v"]
 [ext_resource type="Texture2D" uid="uid://bukfg6000qt4r" path="res://Assets/efectos/ataque verde/sprite_ataque_verde1.png" id="5_b4gol"]
-[ext_resource type="Texture2D" uid="uid://bmq68xaq2v5w3" path="res://Assets/pj prota caminata/sprite_prota_caminata3.png" id="5_ldqfe"]
-[ext_resource type="Texture2D" uid="uid://bx7e8lokhyq1k" path="res://Assets/pj prota correr/sprite_prota_correr0.png" id="6_5d76g"]
 [ext_resource type="Texture2D" uid="uid://bk35tvh0ijdda" path="res://Assets/efectos/ataque verde/sprite_ataque_verde2.png" id="6_r4fmo"]
 [ext_resource type="Texture2D" uid="uid://cyehkuncglesh" path="res://Assets/efectos/ataque verde/sprite_ataque_verde3.png" id="7_bcn3v"]
-[ext_resource type="Texture2D" uid="uid://cic6txlm48cqb" path="res://Assets/pj prota correr/sprite_prota_correr1.png" id="7_sb2or"]
 [ext_resource type="Texture2D" uid="uid://u5ljgyaf514y" path="res://Assets/efectos/ataque verde/sprite_ataque_verde4.png" id="8_tndtm"]
-[ext_resource type="Texture2D" uid="uid://dxtpjtbpc6d8j" path="res://Assets/pj prota correr/sprite_prota_correr2.png" id="8_v8mjx"]
-[ext_resource type="Texture2D" uid="uid://7x7pkx563628" path="res://Assets/pj prota correr/sprite_prota_correr3.png" id="9_2c0fp"]
 [ext_resource type="Texture2D" uid="uid://nkx72jkmlume" path="res://Assets/efectos/ataque verde/sprite_ataque_verde5.png" id="9_7n0fy"]
-[ext_resource type="Texture2D" uid="uid://127o75wgjcov" path="res://Assets/pj prota salto/sprite_prota_salto0.png" id="13_q4s4l"]
-[ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/pj prota salto/sprite_prota_salto1.png" id="14_361ip"]
-[ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/pj prota salto/sprite_prota_salto2.png" id="15_c06m1"]
-[ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/pj prota salto/sprite_prota_salto3.png" id="16_31k2h"]
 [ext_resource type="PackedScene" uid="uid://bpsrn4wc8548e" path="res://addons/health_bar_2d/health_bar_2d.tscn" id="17_1340j"]
-[ext_resource type="Texture2D" uid="uid://d0oo8ivey6eh8" path="res://Assets/efectos/mask 2.png" id="18_ldqfe"]
-[ext_resource type="Texture2D" uid="uid://ce0jmbk2nhaf4" path="res://Assets/efectos/mask 3.png" id="19_5d76g"]
-[ext_resource type="Texture2D" uid="uid://dvnr6et74hq4e" path="res://Assets/efectos/pj prota mask 1.png" id="20_sb2or"]
 [ext_resource type="PackedScene" uid="uid://iqrh31wd8rbm" path="res://Escenas/HUD mascara.tscn" id="21_5d76g"]
+[ext_resource type="Texture2D" uid="uid://cykeycdqycs4k" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo0.png" id="30_tndtm"]
+[ext_resource type="Texture2D" uid="uid://drd3tfhqgvxkj" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo1.png" id="31_7n0fy"]
+[ext_resource type="Texture2D" uid="uid://dl2arjirxy736" path="res://Assets/anim prota/pj prota caminata/sprite_prota_caminata0.png" id="32_8nmji"]
+[ext_resource type="Texture2D" uid="uid://dxuntctrctdyk" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo2.png" id="32_ftcb1"]
+[ext_resource type="Texture2D" uid="uid://2oe06fxg5s5j" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo3.png" id="33_qgdf7"]
+[ext_resource type="Texture2D" uid="uid://dx5crnrny3pfh" path="res://Assets/anim prota/pj prota caminata/sprite_prota_caminata1.png" id="33_rxxvx"]
+[ext_resource type="Texture2D" uid="uid://d0oo8ivey6eh8" path="res://Assets/efectos/mascaras/mask 2.png" id="33_tndtm"]
+[ext_resource type="Texture2D" uid="uid://ce0jmbk2nhaf4" path="res://Assets/efectos/mascaras/mask 3.png" id="34_7n0fy"]
+[ext_resource type="Texture2D" uid="uid://cxbwccrbhp2rx" path="res://Assets/anim prota/pj prota caminata/sprite_prota_caminata2.png" id="34_iqwwu"]
+[ext_resource type="Texture2D" uid="uid://c0k7kofnsbu3w" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo4.png" id="34_s30ff"]
+[ext_resource type="Texture2D" uid="uid://bmq68xaq2v5w3" path="res://Assets/anim prota/pj prota caminata/sprite_prota_caminata3.png" id="35_0xscd"]
+[ext_resource type="Texture2D" uid="uid://cte0itwk45u68" path="res://Assets/efectos/fx amarillo/sprite_fx _rayo5.png" id="35_70y21"]
+[ext_resource type="Texture2D" uid="uid://dvnr6et74hq4e" path="res://Assets/efectos/mascaras/pj prota mask 1.png" id="35_ftcb1"]
+[ext_resource type="Texture2D" uid="uid://bx7e8lokhyq1k" path="res://Assets/anim prota/pj prota correr/sprite_prota_correr0.png" id="36_h20h5"]
+[ext_resource type="Texture2D" uid="uid://cic6txlm48cqb" path="res://Assets/anim prota/pj prota correr/sprite_prota_correr1.png" id="37_kh1sm"]
+[ext_resource type="Texture2D" uid="uid://dxtpjtbpc6d8j" path="res://Assets/anim prota/pj prota correr/sprite_prota_correr2.png" id="38_ytkha"]
+[ext_resource type="Texture2D" uid="uid://7x7pkx563628" path="res://Assets/anim prota/pj prota correr/sprite_prota_correr3.png" id="39_s3vth"]
+[ext_resource type="Texture2D" uid="uid://be2c44bjnqehw" path="res://Assets/anim prota/pj prota iddle/sprite_prota_iddle0.png" id="40_wf4fn"]
+[ext_resource type="Texture2D" uid="uid://d2bhgb5f688hn" path="res://Assets/anim prota/pj prota iddle/sprite_prota_iddle1.png" id="41_60hde"]
+[ext_resource type="Texture2D" uid="uid://bywch02kr41si" path="res://Assets/anim prota/pj prota iddle/sprite_prota_iddle2.png" id="42_6xnnk"]
+[ext_resource type="Texture2D" uid="uid://127o75wgjcov" path="res://Assets/anim prota/pj prota salto/sprite_prota_salto0.png" id="43_25b21"]
+[ext_resource type="Texture2D" uid="uid://dghvdjwlbq76x" path="res://Assets/anim prota/pj prota salto/sprite_prota_salto1.png" id="44_wpujg"]
+[ext_resource type="Texture2D" uid="uid://df7qnqjktxwre" path="res://Assets/anim prota/pj prota salto/sprite_prota_salto2.png" id="45_3xpwh"]
+[ext_resource type="Texture2D" uid="uid://dcy42n2p76hbk" path="res://Assets/anim prota/pj prota salto/sprite_prota_salto3.png" id="46_rkn32"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_btktc"]
-resource_local_to_scene = true
-resource_name = "Indio"
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8g85c"]
+radius = 30.0
+height = 129.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43k7d"]
+radius = 25.5
+height = 117.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tndtm"]
+radius = 49.671112
+height = 446.71118
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tndtm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_tndtm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_7n0fy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_ftcb1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_qgdf7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_s30ff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_70y21")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"Rayo",
+"speed": 3.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7n0fy"]
+radius = 24.00003
+height = 128.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7n0fy"]
+radius = 491.38235
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7n0fy"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -40,10 +92,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("3_x5nqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_jjne1")
 }],
 "loop": true,
-"name": &"Ataque burla",
-"speed": 3.0
+"name": &"AtaqueBurla",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -65,12 +120,12 @@ animations = [{
 "texture": ExtResource("9_7n0fy")
 }],
 "loop": true,
-"name": &"Ataque ira",
-"speed": 12.0
+"name": &"AtaqueIra",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("16_31k2h")
+"texture": ExtResource("46_rkn32")
 }],
 "loop": true,
 "name": &"Caida",
@@ -78,47 +133,47 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_1340j")
+"texture": ExtResource("32_8nmji")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_g735c")
+"texture": ExtResource("33_rxxvx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_3le5i")
+"texture": ExtResource("34_iqwwu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_ldqfe")
+"texture": ExtResource("35_0xscd")
 }],
 "loop": true,
 "name": &"Caminata",
-"speed": 4.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_5d76g")
+"texture": ExtResource("36_h20h5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_sb2or")
+"texture": ExtResource("37_kh1sm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_v8mjx")
+"texture": ExtResource("38_ytkha")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_2c0fp")
+"texture": ExtResource("39_s3vth")
 }],
 "loop": true,
 "name": &"Correr",
-"speed": 10.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_8g85c")
+"texture": ExtResource("40_wf4fn")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_muoba")
+"texture": ExtResource("41_60hde")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_fwv5a")
+"texture": ExtResource("42_6xnnk")
 }],
 "loop": true,
 "name": &"Idle",
@@ -126,44 +181,28 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("13_q4s4l")
+"texture": ExtResource("43_25b21")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_361ip")
+"texture": ExtResource("44_wpujg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_c06m1")
+"texture": ExtResource("45_3xpwh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_rkn32")
 }],
-"loop": false,
+"loop": true,
 "name": &"Salto",
-"speed": 30.0
+"speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8g85c"]
-radius = 30.0
-height = 129.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43k7d"]
-radius = 25.5
-height = 117.0
-
-[node name="jugador" type="CharacterBody2D" unique_id=1676021811 groups=["player"]]
+[node name="jugador" type="CharacterBody2D" unique_id=1676021811 groups=["Enemigo", "player"]]
 script = ExtResource("1_pfvk3")
-Ira_Desbloqueada = true
-Burla_Desbloqueada = true
-Dios_Desbloqueada = true
-TIEMPO_MAX_USO = 32.03
-COOLDOWN_DURACION = 0.0
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=193101617]
-position = Vector2(0.99999905, -15)
-scale = Vector2(0.17908657, 0.17908657)
-sprite_frames = SubResource("SpriteFrames_btktc")
-animation = &"Idle"
-speed_scale = 0.7
+tiempo_max_uso_mascara = 111.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
-position = Vector2(2, -3)
+position = Vector2(16, 0)
 shape = SubResource("CapsuleShape2D_8g85c")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1557022389]
@@ -175,6 +214,16 @@ position = Vector2(-30, 12)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
+
+[node name="AreaAtaqueMelee" type="Area2D" parent="." unique_id=1623803753]
+position = Vector2(-8.000004, -8)
+scale = Vector2(0.17908657, 0.17908657)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAtaqueMelee" unique_id=554835211]
+position = Vector2(223.35567, 89.34227)
+rotation = 1.5707964
+scale = Vector2(1.0000002, 1.0000002)
+shape = SubResource("CapsuleShape2D_tndtm")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
 position = Vector2(0, -128)
@@ -206,6 +255,44 @@ text = "REINTENTAR"
 layout_mode = 2
 text = "MENU"
 
+[node name="Rayo" type="Node2D" parent="." unique_id=1889149703]
+position = Vector2(-72, -464)
+
+[node name="animacionrayo" type="AnimatedSprite2D" parent="Rayo" unique_id=1810812379]
+position = Vector2(296.00006, 327.99994)
+scale = Vector2(0.32933334, 0.32933334)
+sprite_frames = SubResource("SpriteFrames_tndtm")
+animation = &"Rayo"
+frame = 6
+frame_progress = 1.0
+speed_scale = 0.7
+
+[node name="AreaImpacto" type="Area2D" parent="Rayo" unique_id=59621879]
+visible = false
+position = Vector2(408, 496)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Rayo/AreaImpacto" unique_id=497365547]
+position = Vector2(16, -8)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_7n0fy")
+
+[node name="Escudo" type="Node2D" parent="." unique_id=1435659881]
+
+[node name="Escudo" type="Area2D" parent="Escudo" unique_id=518263149]
+position = Vector2(32, 8.000001)
+rotation = 1.5707964
+scale = Vector2(0.17908661, 0.17908661)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Escudo/Escudo" unique_id=465398122]
+position = Vector2(-44.671124, 134.01337)
+shape = SubResource("CircleShape2D_7n0fy")
+
+[node name="TimerDuracionEscudo" type="Timer" parent="." unique_id=1481636426]
+
+[node name="TimerCooldownAtaque" type="Timer" parent="." unique_id=1688888180]
+wait_time = 1.5
+one_shot = true
+
 [node name="HealthBar2D" parent="." unique_id=331883600 instance=ExtResource("17_1340j")]
 visible = false
 offset_left = -496.0
@@ -215,23 +302,30 @@ offset_bottom = -199.00003
 scale = Vector2(5, 5)
 tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1082540426]
+position = Vector2(16.000002, -8)
+scale = Vector2(0.15865384, 0.15865384)
+sprite_frames = SubResource("SpriteFrames_7n0fy")
+animation = &"Salto"
+speed_scale = 0.7
+
 [node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
 visible = false
-position = Vector2(8, -40)
-scale = Vector2(0.17969264, 0.17969264)
-texture = ExtResource("18_ldqfe")
+position = Vector2(16, -40)
+scale = Vector2(0.17969266, 0.17969266)
+texture = ExtResource("33_tndtm")
 
 [node name="Mask3" type="Sprite2D" parent="." unique_id=1419972385]
 visible = false
-position = Vector2(5, -49.000004)
-scale = Vector2(0.20515724, 0.1723599)
-texture = ExtResource("19_5d76g")
+position = Vector2(16, -47.999996)
+scale = Vector2(0.20515725, 0.17235991)
+texture = ExtResource("34_7n0fy")
 
 [node name="PjProtaMask1" type="Sprite2D" parent="." unique_id=1314610756]
 visible = false
-position = Vector2(0.3749979, -19.625)
-scale = Vector2(0.18118992, 0.18118992)
-texture = ExtResource("20_sb2or")
+position = Vector2(8, -8)
+scale = Vector2(0.18118994, 0.18118994)
+texture = ExtResource("35_ftcb1")
 
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]
