@@ -97,6 +97,8 @@ shape = SubResource("WorldBoundaryShape2D_hy3li")
 
 [node name="Jugador" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
 position = Vector2(134, 6)
+vida_maxima = null
+cooldown_duracion = null
 
 [node name="CharacterBody2D2" parent="." unique_id=1751731663 instance=ExtResource("4_6pcy2")]
 position = Vector2(-314, 71)

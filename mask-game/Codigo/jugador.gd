@@ -62,7 +62,7 @@ func _input(event: InputEvent) -> void:
 		ciclo_mascara(1)
 	elif event.is_action_pressed("Cambio_B"): 
 		ciclo_mascara(-1)
-	elif event.is_action_pressed("Ataque") and actual == Estado.BURLA:
+	elif event.is_action_pressed("Ataque"):
 		ataque = true
 
 func ciclo_mascara(direccion: int) -> void:
@@ -205,14 +205,18 @@ func _physics_process(delta: float) -> void:
 func manejar_animaciones() -> void:
 	var en_suelo = is_on_floor()
 	var velocidad_y = velocity.y
-	
+	print(ataque, actual)
 	if ataque and actual == Estado.BURLA:
 		if animacion.animation != "AtaqueBurla":
 			animacion.play("AtaqueBurla")
+			await animacion.animation_finished
+			ataque = false
 		return
 	if ataque and actual == Estado.IRA:
 		if animacion.animation != "AtaqueIra":
 			animacion.play("AtaqueIra")
+			await animacion.animation_finished
+			ataque = false
 		return
 	
 	if not en_suelo:

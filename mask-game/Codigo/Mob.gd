@@ -27,6 +27,7 @@ var dano_aplicado_en_este_ataque := false
 # Referencias
 var jugador_ref: Node2D = null
 var direccion := Vector2.RIGHT
+var jugador_ref_atack_hit = null 
 
 # Nodos
 @onready var sprite := $AnimatedSprite2D as AnimatedSprite2D
@@ -106,7 +107,17 @@ func iniciar_ataque() -> void:
 	dano_aplicado_en_este_ataque = false
 	sprite.play("ataque")
 	atacando = true
-
+	# Esperamos a que la animación termine para volver a perseguir
+	await sprite.animation_finished
+		
+	atacando = false
+	if jugador_ref_atack_hit != null:
+		estado_actual = Estado.ATACAR
+	elif jugador_ref != null:
+		estado_actual = Estado.PERSEGUIR
+	else:
+		estado_actual = Estado.DEAMBULANDO
+	
 func finalizar_ataque() -> void:
 	atacando = false
 	
@@ -128,8 +139,8 @@ func _on_frame_cambiado() -> void:
 
 func procesar_impacto() -> void:
 	for cuerpo in attack_hitbox.get_overlapping_bodies():
-		if cuerpo.is_in_group("player") and cuerpo.has_method("recibir_dano"):
-			cuerpo.recibir_dano(dano_ataque)
+		if cuerpo.is_in_group("player"):
+			cuerpo.recibir_daño(dano_ataque)
 			dano_aplicado_en_este_ataque = true
 			print("¡Golpe conectado en frame ", sprite.frame, "!")
 
@@ -190,6 +201,7 @@ func morir() -> void:
 
 func _on_attack_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		jugador_ref_atack_hit = body
 		estado_actual = Estado.ATACAR
 
 func _on_player_detected(body: Node2D) -> void:

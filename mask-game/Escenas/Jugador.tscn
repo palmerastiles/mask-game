@@ -96,9 +96,9 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("2_jjne1")
 }],
-"loop": true,
+"loop": false,
 "name": &"AtaqueBurla",
-"speed": 5.0
+"speed": 2.5
 }, {
 "frames": [{
 "duration": 1.0,
@@ -119,9 +119,9 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("9_7n0fy")
 }],
-"loop": true,
+"loop": false,
 "name": &"AtaqueIra",
-"speed": 5.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -276,7 +276,9 @@ tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 position = Vector2(2.2737368e-13, -5.0000005)
 scale = Vector2(0.15865384, 0.15865384)
 sprite_frames = SubResource("SpriteFrames_7n0fy")
-animation = &"Salto"
+animation = &"AtaqueIra"
+frame = 5
+frame_progress = 1.0
 speed_scale = 0.7
 
 [node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
@@ -302,7 +304,6 @@ position = Vector2(14, 3)
 offset = Vector2(0, -80)
 
 [node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
-visible = false
 script = null
 
 [node name="MenuMuerte" type="Control" parent="Camera2D/CanvasLayer" unique_id=1896111280]
