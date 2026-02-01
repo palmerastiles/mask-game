@@ -38,6 +38,7 @@ var cooldowns := {
 	Estado.DIOS: 0.0
 }
 
+@onready var area_ataque: Area2D = $AreaAtaqueMelee
 @onready var animacion := $AnimatedSprite2D
 @onready var menu_muerte := $Camera2D/CanvasLayer/MenuMuerte
 @onready var mascaras := {
@@ -56,6 +57,7 @@ func _ready() -> void:
 		actual = rotacion[0]
 		equipar_mascara(actual)
 		actualizar_visibilidad_mascaras()
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Cambio_F"):
@@ -193,6 +195,7 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		velocity.x = direction * speed
 		animacion.flip_h = direction < 0
+		actualizar_orientacion_hitbox(direction) #Actualizar
 		for nodo in mascaras.values():
 			if nodo:
 				nodo.flip_h = direction < 0
@@ -205,7 +208,7 @@ func _physics_process(delta: float) -> void:
 func manejar_animaciones() -> void:
 	var en_suelo = is_on_floor()
 	var velocidad_y = velocity.y
-	print(ataque, actual)
+	#print(ataque, actual)
 	if ataque and actual == Estado.BURLA:
 		if animacion.animation != "AtaqueBurla":
 			animacion.play("AtaqueBurla")
@@ -235,6 +238,7 @@ func manejar_animaciones() -> void:
 			if animacion.animation != "Idle":
 				animacion.play("Idle")
 			animacion.speed_scale = 1.0
+
 
 func procesar_tiempos(delta: float) -> void:
 	# Reducir cooldowns
@@ -291,3 +295,72 @@ func Desbloquear_Burla() -> void:
 
 func Desbloquear_Dios() -> void:
 	desbloquear_dios()
+
+
+
+# --- LÓGICA DE COMBATE Y DAÑO ---
+
+# Esta función se debe conectar a la señal "frame_changed" del AnimatedSprite2D
+
+
+func _on_animated_sprite_2d_frame_changed() -> void:
+	# Si no estamos atacando, no gastamos recursos calculando
+	if not ataque and not animacion.animation.begins_with("Ataque"):
+		return
+	
+	var frame_actual = animacion.frame
+	var anim_nombre = animacion.animation
+	
+	# Definimos en qué frame golpea cada máscara
+	# (Ajusta los números según tus sprites: el primer frame es 0)
+	var frame_de_impacto = -1
+	
+	match anim_nombre:
+		"AtaqueIra":
+			frame_de_impacto = 3
+		"AtaqueBurla":
+			frame_de_impacto = 2  # Ejemplo: golpea rápido
+		"AtaqueDios":
+			frame_de_impacto = 3  # Ejemplo: golpea lento
+	
+	# Si estamos JUSTO en el frame del golpe, aplicamos el daño
+	if frame_actual == frame_de_impacto:
+		
+		aplicar_daño_en_area()
+		
+
+func aplicar_daño_en_area() -> void:
+	# Obtenemos todo lo que esté tocando el AreaAtaqueMelee en este momento
+	var cuerpos = area_ataque.get_overlapping_bodies()
+	
+	for cuerpo in cuerpos:
+		
+		# 1. Ignoramos al propio jugador
+		if cuerpo == self:
+			continue
+			
+		# 2. Verificamos que sea un enemigo (debe tener el método recibir_daño)
+		if cuerpo.has_method("recibir_dano"):
+			print("Daño enviado")
+			# Calculamos daño final (ya calculado en equipar_mascara)
+			var daño_final = int(daño_actual)
+			
+			# Enviamos la "señal" llamando a la función del enemigo
+			cuerpo.recibir_dano(daño_final)
+			
+			
+			print("¡GOLPE! ", Estado.keys()[actual], " causó ", daño_final, " de daño a ", cuerpo.name)
+
+
+
+func actualizar_orientacion_hitbox(direccion: float) -> void:
+	# Si no existe la referencia, salimos para evitar errores
+	if not area_ataque:
+		return
+
+	# Si la dirección es negativa (Izquierda), invertimos la escala
+	if direccion < 0:
+		area_ataque.scale.x = -0.165
+	# Si la dirección es positiva (Derecha), la ponemos normal
+	elif direccion > 0:
+		area_ataque.scale.x = 0.165

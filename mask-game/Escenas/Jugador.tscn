@@ -276,9 +276,7 @@ tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 position = Vector2(2.2737368e-13, -5.0000005)
 scale = Vector2(0.15865384, 0.15865384)
 sprite_frames = SubResource("SpriteFrames_7n0fy")
-animation = &"AtaqueIra"
-frame = 5
-frame_progress = 1.0
+animation = &"AtaqueBurla"
 speed_scale = 0.7
 
 [node name="Mask2" type="Sprite2D" parent="." unique_id=1542244411]
@@ -329,5 +327,6 @@ text = "REINTENTAR"
 layout_mode = 2
 text = "MENU"
 
+[connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_frame_changed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]

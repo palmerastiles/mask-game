@@ -24,6 +24,7 @@ var muerto := false
 var atacando := false
 var dano_aplicado_en_este_ataque := false
 
+
 # Referencias
 var jugador_ref: Node2D = null
 var direccion := Vector2.RIGHT
@@ -198,6 +199,7 @@ func morir() -> void:
 	set_collision_layer_value(1, false)
 	set_collision_mask_value(1, false)
 	print("Enemigo eliminado")
+	queue_free()
 
 func _on_attack_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
