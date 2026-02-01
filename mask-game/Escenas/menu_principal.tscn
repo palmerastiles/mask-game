@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dwrj5l2uuureu"]
 
+[ext_resource type="Script" uid="uid://bi6quyepdg0q0" path="res://Codigo/menu_principal.gd" id="1_xv3xs"]
+
 [node name="MenuPrincipal" type="Control" unique_id=449687543]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xv3xs")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1927073336]
 layout_mode = 1
@@ -28,22 +31,27 @@ theme_override_font_sizes/font_size = 50
 text = "Nanuco Execution"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1437561592]
+[node name="Botones" type="VBoxContainer" parent="MarginContainer" unique_id=1437561592]
 layout_mode = 2
 alignment = 1
 
-[node name="Jugar" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2057432457]
+[node name="Jugar" type="Button" parent="MarginContainer/Botones" unique_id=2057432457]
 layout_mode = 2
 text = "Jugar al juego"
 
-[node name="Opciones" type="Button" parent="MarginContainer/VBoxContainer" unique_id=215782635]
+[node name="Opciones" type="Button" parent="MarginContainer/Botones" unique_id=215782635]
 layout_mode = 2
 text = "Opciones para opciones"
 
-[node name="Créditos" type="Button" parent="MarginContainer/VBoxContainer" unique_id=237338246]
+[node name="Créditos" type="Button" parent="MarginContainer/Botones" unique_id=237338246]
 layout_mode = 2
 text = "Créditos de los creadores"
 
-[node name="Salir del juego" type="Button" parent="MarginContainer/VBoxContainer" unique_id=809953111]
+[node name="Salir del juego" type="Button" parent="MarginContainer/Botones" unique_id=809953111]
 layout_mode = 2
 text = "Salir a al escritorio de salida"
+
+[connection signal="pressed" from="MarginContainer/Botones/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="MarginContainer/Botones/Opciones" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="MarginContainer/Botones/Créditos" to="." method="_on_créditos_pressed"]
+[connection signal="pressed" from="MarginContainer/Botones/Salir del juego" to="." method="_on_salir_del_juego_pressed"]
