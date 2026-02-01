@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://1ade4dth50eu"]
+
+[ext_resource type="Texture2D" uid="uid://bncyk20d5jq4q" path="res://Assets/background/fondo boss final capa 1.png" id="1_m47q7"]
+[ext_resource type="Texture2D" uid="uid://bfo4sftq47358" path="res://Assets/background/fondo boss final capa 2.png" id="2_pxr2n"]
+[ext_resource type="Texture2D" uid="uid://bb0gs7lq0etq0" path="res://Assets/background/fondo boss final capa 3.png" id="3_xmh7v"]
+
+[node name="Node2D" type="Node2D" unique_id=1720161720]
+
+[node name="FondoBossFinalCapa1" type="Sprite2D" parent="." unique_id=1529344870]
+z_index = -1
+position = Vector2(9, -13)
+texture = ExtResource("1_m47q7")
+
+[node name="FondoBossFinalCapa2" type="Sprite2D" parent="FondoBossFinalCapa1" unique_id=1099577289]
+z_index = -2
+position = Vector2(1, -575)
+texture = ExtResource("2_pxr2n")
+
+[node name="FondoBossFinalCapa3" type="Sprite2D" parent="FondoBossFinalCapa1/FondoBossFinalCapa2" unique_id=483988615]
+z_index = -3
+position = Vector2(-2, -583)
+texture = ExtResource("3_xmh7v")
