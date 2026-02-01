@@ -38,7 +38,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8g85c"]
 radius = 30.0
-height = 129.0
+height = 116.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_43k7d"]
 radius = 25.5
@@ -225,36 +225,6 @@ rotation = 1.5707964
 scale = Vector2(1.0000002, 1.0000002)
 shape = SubResource("CapsuleShape2D_tndtm")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
-position = Vector2(0, -128)
-
-[node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
-visible = false
-script = null
-
-[node name="MenuMuerte" type="Control" parent="Camera2D/CanvasLayer" unique_id=1896111280]
-process_mode = 3
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Camera2D/CanvasLayer/MenuMuerte" unique_id=1066239983]
-layout_mode = 0
-offset_right = 166.0
-offset_bottom = 40.0
-scale = Vector2(2, 2)
-alignment = 1
-
-[node name="Retry_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1162891544]
-layout_mode = 2
-text = "REINTENTAR"
-
-[node name="Menu_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1198050434]
-layout_mode = 2
-text = "MENU"
-
 [node name="Rayo" type="Node2D" parent="." unique_id=1889149703]
 position = Vector2(-72, -464)
 
@@ -284,7 +254,7 @@ rotation = 1.5707964
 scale = Vector2(0.17908661, 0.17908661)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Escudo/Escudo" unique_id=465398122]
-position = Vector2(-44.671124, 134.01337)
+position = Vector2(-55.838913, 106.093994)
 shape = SubResource("CircleShape2D_7n0fy")
 
 [node name="TimerDuracionEscudo" type="Timer" parent="." unique_id=1481636426]
@@ -303,7 +273,7 @@ scale = Vector2(5, 5)
 tint_progress = Color(0.6001417, 0, 0.23248968, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1082540426]
-position = Vector2(16.000002, -8)
+position = Vector2(2.2737368e-13, -5.0000005)
 scale = Vector2(0.15865384, 0.15865384)
 sprite_frames = SubResource("SpriteFrames_7n0fy")
 animation = &"Salto"
@@ -326,6 +296,37 @@ visible = false
 position = Vector2(8, -8)
 scale = Vector2(0.18118994, 0.18118994)
 texture = ExtResource("35_ftcb1")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
+position = Vector2(14, 3)
+offset = Vector2(0, -80)
+
+[node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
+visible = false
+script = null
+
+[node name="MenuMuerte" type="Control" parent="Camera2D/CanvasLayer" unique_id=1896111280]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Camera2D/CanvasLayer/MenuMuerte" unique_id=1066239983]
+layout_mode = 0
+offset_right = 166.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+alignment = 1
+
+[node name="Retry_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1162891544]
+layout_mode = 2
+text = "REINTENTAR"
+
+[node name="Menu_Bttn" type="Button" parent="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer" unique_id=1198050434]
+layout_mode = 2
+text = "MENU"
 
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Retry_Bttn" to="." method="_on_retry_bttn_pressed"]
 [connection signal="pressed" from="Camera2D/CanvasLayer/MenuMuerte/HBoxContainer/Menu_Bttn" to="." method="_on_menu_bttn_pressed"]

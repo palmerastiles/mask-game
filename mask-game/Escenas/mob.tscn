@@ -74,7 +74,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3c6bj"]
 radius = 17.0
-height = 84.0
+height = 90.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pxqvm"]
 radius = 301.02658
@@ -84,7 +84,7 @@ size = Vector2(50.375, 5)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k5pfw"]
 radius = 18.0
-height = 84.0
+height = 94.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1751731663]
 script = ExtResource("1_v6f7r")
@@ -102,7 +102,7 @@ shape = SubResource("CapsuleShape2D_3c6bj")
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
-position = Vector2(-16, 0)
+position = Vector2(-15, 3)
 shape = SubResource("CircleShape2D_pxqvm")
 
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]
@@ -117,7 +117,7 @@ shape = SubResource("RectangleShape2D_pxqvm")
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1219108259]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1794919385]
-position = Vector2(-15, -1)
+position = Vector2(-15, -4)
 shape = SubResource("CapsuleShape2D_k5pfw")
 
 [node name="AttackCooldown" type="Timer" parent="." unique_id=1923167955]
