@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://gdlkct7b64pl"]
+
+[ext_resource type="Texture2D" uid="uid://doweoegcvyve8" path="res://Assets/boss 2 muerto ataque/sprite_boss2muerto_ataque0.png" id="1_vjmc2"]
+[ext_resource type="Texture2D" uid="uid://csb0yqnxoyje2" path="res://Assets/boss 2 muerto ataque/sprite_boss2muerto_ataque1.png" id="2_3v7cb"]
+[ext_resource type="Texture2D" uid="uid://cv5722emcvapp" path="res://Assets/boss 2 muerto caminata/sprite_boss2muerto_caminar0.png" id="3_po1jn"]
+[ext_resource type="Texture2D" uid="uid://7w7na7i7tp6t" path="res://Assets/boss 2 muerto caminata/sprite_boss2muerto_caminar1.png" id="4_mfpm8"]
+[ext_resource type="Texture2D" uid="uid://dquf3r3kqawob" path="res://Assets/boss 2 muerto caminata/sprite_boss2muerto_caminar2.png" id="5_hmwf7"]
+[ext_resource type="Texture2D" uid="uid://dmux5gvwl8emf" path="res://Assets/boss 2 muerto iddle/sprite_boss2_iddle0.png" id="6_grkwl"]
+[ext_resource type="Texture2D" uid="uid://ct6ej1ugc18t1" path="res://Assets/boss 2 muerto iddle/sprite_boss2_iddle1.png" id="7_7pnhn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uos3w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vjmc2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3v7cb")
+}],
+"loop": true,
+"name": &"ataque",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_po1jn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_mfpm8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_hmwf7")
+}],
+"loop": true,
+"name": &"caminata",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_grkwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7pnhn")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fwewg"]
+radius = 95.0
+height = 548.0
+
+[node name="boss2" type="CharacterBody2D" unique_id=189351153]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1710165793]
+position = Vector2(11, -44)
+sprite_frames = SubResource("SpriteFrames_uos3w")
+animation = &"caminata"
+frame_progress = 0.17772034
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1242638707]
+position = Vector2(133, 77)
+shape = SubResource("CapsuleShape2D_fwewg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=873382699]
+position = Vector2(-57, -146)
+shape = SubResource("CapsuleShape2D_fwewg")
