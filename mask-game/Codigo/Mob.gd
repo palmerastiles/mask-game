@@ -1,13 +1,16 @@
 extends CharacterBody2D
 
-class_name EnemigoRenacido
+
 
 # Constantes
 const VELOCIDAD_NORMAL := 30.0
 const VELOCIDAD_PERSECUCION := 80.0
 const DISTANCIA_DETECCION := 200.0
 const FRAME_IMPACTO_ATAQUE := 4
-const TIEMPOS_DEAMBULACION := [0.5, 1.0, 1.5]
+
+# Arrays separados para direcciones y tiempos
+var direcciones_deambulacion = [Vector2.RIGHT, Vector2.LEFT]
+var tiempos_deambulacion = [0.5, 1.0, 1.5]  # Cambiado a variable, no constante
 
 # Estados
 enum Estado { DEAMBULANDO, PERSEGUIR, ATACAR, MUERTO }
@@ -51,9 +54,35 @@ func inicializar_conexiones() -> void:
 		sprite.frame_changed.connect(_on_frame_cambiado)
 
 func iniciar_timer_deambulacion() -> void:
+	# 1. Elegir dirección inicial
+	direccion = elegir_direccion_aleatoria()
+	
+	# 2. Elegir tiempo aleatorio (IMPORTANTE: usar el array de tiempos)
+	var tiempo_aleatorio = elegir_tiempo_aleatorio()
+	
 	if direction_timer:
-		direction_timer.wait_time = elegir_aleatorio(TIEMPOS_DEAMBULACION)
+		# Verificar que el tiempo sea válido
+		if tiempo_aleatorio <= 0:
+			print("ADVERTENCIA: Tiempo inválido (<= 0). Usando valor por defecto.")
+			tiempo_aleatorio = 1.0
+		
+		direction_timer.wait_time = tiempo_aleatorio
 		direction_timer.start()
+
+func elegir_direccion_aleatoria() -> Vector2:
+	# Método con shuffle para direcciones
+	var direcciones = direcciones_deambulacion.duplicate()
+	direcciones.shuffle()
+	return direcciones[0]
+
+func elegir_tiempo_aleatorio() -> float:
+	# Método con shuffle para tiempos
+	var tiempos = tiempos_deambulacion.duplicate()
+	tiempos.shuffle()
+	return tiempos[0]
+	
+	# Alternativa más simple (sin shuffle):
+	# return tiempos_deambulacion[randi() % tiempos_deambulacion.size()]
 
 func _physics_process(delta: float) -> void:
 	if muerto:
@@ -163,11 +192,17 @@ func _on_direction_timer_timeout() -> void:
 		return
 	
 	cambiar_direccion_aleatoria()
-	direction_timer.wait_time = elegir_aleatorio(TIEMPOS_DEAMBULACION)
+	
+	# Elegir nuevo tiempo (usar elegir_tiempo_aleatorio, no elegir_direccion_aleatoria)
+	var nuevo_tiempo = elegir_tiempo_aleatorio()
+	if nuevo_tiempo <= 0:
+		nuevo_tiempo = 1.0
+	
+	direction_timer.wait_time = nuevo_tiempo
 	direction_timer.start()
 
 func cambiar_direccion_aleatoria() -> void:
-	direccion.x = elegir_aleatorio([-1, 1])
+	direccion.x = elegir_direccion_aleatoria().x
 	
 	if randf() < 0.3:  # 30% de probabilidad de detenerse
 		velocity.x = 0
@@ -217,8 +252,3 @@ func _on_player_lost(body: Node2D) -> void:
 		jugador_ref = null
 		estado_actual = Estado.DEAMBULANDO
 		print("Jugador perdido")
-
-# Utilidades
-func elegir_aleatorio(array: Array):
-	array.shuffle()
-	return array[0] if array else null

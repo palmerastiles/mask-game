@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do3vqcj7gn6x8"
-path="res://.godot/imported/sprite_npc_correr0.png-e354583d46b84269155ef9e31dcdfee3.ctex"
+uid="uid://dykha87jqhec7"
+path="res://.godot/imported/sprite_npc_corre20.png-e9aa2c2e0a8b274a11bd59d485b95382.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/anim npc/npc correr/sprite_npc_correr0.png"
-dest_files=["res://.godot/imported/sprite_npc_correr0.png-e354583d46b84269155ef9e31dcdfee3.ctex"]
+source_file="res://Assets/anim npc/npc correr/sprite_npc_corre20.png"
+dest_files=["res://.godot/imported/sprite_npc_corre20.png-e9aa2c2e0a8b274a11bd59d485b95382.ctex"]
 
 [params]
 

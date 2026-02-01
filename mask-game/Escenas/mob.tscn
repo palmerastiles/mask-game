@@ -6,14 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://b75h0nwdwakr5" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque2.png" id="3_unnbp"]
 [ext_resource type="Texture2D" uid="uid://c841jgi5blu6y" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque3.png" id="4_vgwtf"]
 [ext_resource type="Texture2D" uid="uid://kjibx7p1vyjr" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque4.png" id="5_g6esx"]
-[ext_resource type="Texture2D" uid="uid://cyiquqa6xc3to" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar0.png" id="6_gyfq5"]
-[ext_resource type="Texture2D" uid="uid://cis1tgs18ne14" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar1.png" id="7_ttsdk"]
-[ext_resource type="Texture2D" uid="uid://byn6x7g30fukv" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar2.png" id="8_86htk"]
-[ext_resource type="Texture2D" uid="uid://c7q431dfpnoqw" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar3.png" id="9_lgql4"]
-[ext_resource type="Texture2D" uid="uid://do3vqcj7gn6x8" path="res://Assets/anim npc/npc correr/sprite_npc_correr0.png" id="10_acft1"]
-[ext_resource type="Texture2D" uid="uid://bsbge6w2kk44s" path="res://Assets/anim npc/npc correr/sprite_npc_correr1.png" id="11_1f5pg"]
-[ext_resource type="Texture2D" uid="uid://3r80blre8j1r" path="res://Assets/anim npc/npc correr/sprite_npc_correr2.png" id="12_u0c26"]
-[ext_resource type="Texture2D" uid="uid://bml82liot80l1" path="res://Assets/anim npc/npc correr/sprite_npc_correr3.png" id="13_kcwd7"]
+[ext_resource type="Texture2D" uid="uid://7helppo27lmd" path="res://Assets/anim npc/npc caminata/sprite_npc_camina20.png" id="7_v6f7r"]
+[ext_resource type="Texture2D" uid="uid://ig6ak1f1xsna" path="res://Assets/anim npc/npc caminata/sprite_npc_camina21.png" id="8_unnbp"]
+[ext_resource type="Texture2D" uid="uid://b5mv3e0n5uds6" path="res://Assets/anim npc/npc caminata/sprite_npc_camina22.png" id="9_vgwtf"]
+[ext_resource type="Texture2D" uid="uid://cbd0l41jcw84e" path="res://Assets/anim npc/npc caminata/sprite_npc_camina23.png" id="10_g6esx"]
+[ext_resource type="Texture2D" uid="uid://dykha87jqhec7" path="res://Assets/anim npc/npc correr/sprite_npc_corre20.png" id="11_gyfq5"]
+[ext_resource type="Texture2D" uid="uid://bju4fy6g7t20k" path="res://Assets/anim npc/npc correr/sprite_npc_corre21.png" id="12_ttsdk"]
+[ext_resource type="Texture2D" uid="uid://bxc7dndsltqs0" path="res://Assets/anim npc/npc correr/sprite_npc_corre22.png" id="13_86htk"]
+[ext_resource type="Texture2D" uid="uid://c6njn5pp5qh4e" path="res://Assets/anim npc/npc correr/sprite_npc_corre23.png" id="14_lgql4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wkxbj"]
 animations = [{
@@ -39,16 +39,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_gyfq5")
+"texture": ExtResource("7_v6f7r")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_ttsdk")
+"texture": ExtResource("8_unnbp")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_86htk")
+"texture": ExtResource("9_vgwtf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_lgql4")
+"texture": ExtResource("10_g6esx")
 }],
 "loop": true,
 "name": &"caminata",
@@ -56,16 +56,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("10_acft1")
+"texture": ExtResource("11_gyfq5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_1f5pg")
+"texture": ExtResource("12_ttsdk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("12_u0c26")
+"texture": ExtResource("13_86htk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_kcwd7")
+"texture": ExtResource("14_lgql4")
 }],
 "loop": true,
 "name": &"correr",
@@ -93,7 +93,7 @@ script = ExtResource("1_v6f7r")
 position = Vector2(2.9802322e-08, -9)
 scale = Vector2(0.14331503, 0.14331503)
 sprite_frames = SubResource("SpriteFrames_wkxbj")
-animation = &"ataque"
+animation = &"correr"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
 position = Vector2(-14, -2)

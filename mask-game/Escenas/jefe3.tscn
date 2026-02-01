@@ -6,9 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://c8m24ehxpqke4" path="res://Assets/boss 3 iddle/sprite_boss3_iddle0.png" id="3_0h8dx"]
 [ext_resource type="Texture2D" uid="uid://dvm0k67y0a713" path="res://Assets/boss 3 iddle habilidad/sprite_boss3_iddle_habilidad1.png" id="4_payom"]
 [ext_resource type="Texture2D" uid="uid://dt8iype8gjwom" path="res://Assets/boss 3 iddle/sprite_boss3_iddle1.png" id="5_jfsho"]
-[ext_resource type="PackedScene" uid="uid://cxbdmp8cnr33" path="res://Escenas/Bola de fuego.tscn" id="7_0h8dx"]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ofha1"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8qdsc"]
 animations = [{
@@ -38,23 +35,52 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ugu17"]
+size = Vector2(336, 320)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ofha1"]
+radius = 192.0
+height = 448.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ugu17"]
+radius = 415.38416
+
 [node name="Node2D" type="Node2D" unique_id=680482132]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=535738687]
 script = ExtResource("1_ugu17")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=344734738]
-shape = SubResource("CapsuleShape2D_ofha1")
+proyectil_scene = ExtResource("2_0h8dx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=35174800]
+position = Vector2(31.99997, -55.99997)
+scale = Vector2(0.4551282, 0.4551282)
 sprite_frames = SubResource("SpriteFrames_8qdsc")
-animation = &"Atackboss"
-frame_progress = 0.16035599
+animation = &"Idleboss"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=344734738]
+position = Vector2(96, 24)
+shape = SubResource("RectangleShape2D_ugu17")
+
+[node name="AttackHitbox" type="Area2D" parent="CharacterBody2D" unique_id=2035787019]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/AttackHitbox" unique_id=1465659418]
+position = Vector2(80, 40)
+shape = SubResource("CapsuleShape2D_ofha1")
+
+[node name="PlayerDetectionZone" type="Area2D" parent="CharacterBody2D" unique_id=1042003692]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/PlayerDetectionZone" unique_id=2050665809]
+position = Vector2(-176, 8)
+shape = SubResource("CircleShape2D_ugu17")
 
 [node name="Node2D" parent="CharacterBody2D" unique_id=389068533 instance=ExtResource("2_0h8dx")]
 visible = false
-fireball_scene = ExtResource("7_0h8dx")
+position = Vector2(-472, -8)
+orbit_radius = 200.0
 
-[node name="FirePoint" type="Marker2D" parent="." unique_id=170003688]
+[node name="Marker2D" type="Marker2D" parent="CharacterBody2D" unique_id=609925758]
 
 [node name="AttackTimer" type="Timer" parent="." unique_id=1653291976]
+autostart = true
+
+[node name="DirectionTimer" type="Timer" parent="." unique_id=69462958]

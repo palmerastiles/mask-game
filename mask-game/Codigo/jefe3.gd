@@ -1,178 +1,352 @@
 extends CharacterBody2D
 
-@export var fire_ring_scene: PackedScene
-@export var player_path: NodePath
+class_name EnemigoRenacido
 
-@export_category("Ataque de Aro de Fuego")
-@export var ring_attack_cooldown: float = 5.0
-@export var ring_lifetime: float = 8.0
-@export var ring_rotation_speed: float = 180.0
-@export var ring_orbit_radius: float = 100.0
+# Constantes
+const VELOCIDAD_NORMAL := 30.0
+const VELOCIDAD_PERSECUCION := 80.0
+const DISTANCIA_DETECCION := 200.0
+const FRAME_IMPACTO_ATAQUE := 4
+const DISTANCIA_ATAQUE := 150.0  # Distancia mínima para atacar
+const DISTANCIA_PERSECUCION := 300.0  # Distancia máxima para perseguir
 
-@onready var player: Node2D
-@onready var fire_point: Marker2D = $FirePoint
-@onready var attack_timer = $AttackTimer
-#@onready var anim_player: AnimationPlayer = $AnimationPlayer
+# Arrays
+var direcciones_deambulacion = [Vector2.RIGHT, Vector2.LEFT]
 
-enum AttackType {
-	RING_STATIONARY,     # Aro estático en el aire
-	RING_AROUND_BOSS,    # Aro que gira alrededor del jefe
-	RING_CHASE_PLAYER,   # Aro que persigue al jugador
-	RING_EXPANDING       # Aro que se expande
-}
+# Estados
+enum Estado { DEAMBULANDO, PERSEGUIR, ATACAR, MUERTO, PREPARAR_ATAQUE }
 
-var can_attack: bool = true
-var current_attack: AttackType = AttackType.RING_AROUND_BOSS
+# Variables exportadas
+@export var vida_maxima := 100
+@export var daño_ataque := 10
+@export var fuerza_retroceso := 200.0
+@export var proyectil_scene: PackedScene  # Escena del proyectil
+@export var cadencia_ataque := 2.0  # Segundos entre ataques
+@export var velocidad_proyectil := 300.0
 
-func _ready():
-	# Obtener referencia al jugador
-	if player_path:
-		player = get_node(player_path)
-	else:
-		var players = get_tree().get_nodes_in_group("player")
-		if players.size() > 0:
-			player = players[0]
+# Variables de estado
+var estado_actual := Estado.DEAMBULANDO
+var vida: int
+var muerto := false
+var atacando := false
+var daño_aplicado_en_este_ataque := false
+var puede_atacar := true
+var tiempo_desde_ultimo_ataque := 0.0
+
+# Referencias
+var jugador_ref: Node2D = null
+var direccion := Vector2.RIGHT
+
+# Timer interno
+var tiempo_restante_deambulacion: float = 0.0
+var tiempo_maximo_deambulacion: float = 2.0
+
+# Nodos
+@onready var sprite := $AnimatedSprite2D as AnimatedSprite2D
+@onready var player_detection_zone := $PlayerDetectionZone
+@onready var attack_hitbox := $AttackHitbox
+@onready var fire_point := $Marker2D # Punto de lanzamiento de proyectiles
+
+func _ready() -> void:
+	vida = vida_maxima
+	inicializar_conexiones()
+	reiniciar_timer_deambulacion()
 	
-	attack_timer.wait_time = ring_attack_cooldown
-	attack_timer.timeout.connect(_on_attack_timer_timeout)
+	# Verificar que existe el punto de disparo
+	if not fire_point:
+		fire_point = Node2D.new()
+		fire_point.name = "FirePoint"
+		add_child(fire_point)
+		fire_point.position = Vector2(50, 0)  # Posición por defecto
+
+func inicializar_conexiones() -> void:
+	if player_detection_zone:
+		player_detection_zone.body_entered.connect(_on_player_detected)
+		player_detection_zone.body_exited.connect(_on_player_lost)
 	
-	start_attacks()
+	if sprite:
+		sprite.animation_finished.connect(_on_animacion_finalizada)
+		sprite.frame_changed.connect(_on_frame_cambiado)
 
-func start_attacks():
-	attack_timer.start()
-
-func _on_attack_timer_timeout():
-	if can_attack and fire_ring_scene:
-		perform_fire_ring_attack()
-
-func perform_fire_ring_attack():
-	# Animación de preparación
-	#anim_player.play("attack_windup")
-	#await anim_player.animation_finished
+func reiniciar_timer_deambulacion() -> void:
+	# Elegir nueva dirección
+	direccion = elegir_direccion_aleatoria()
 	
-	match current_attack:
-		AttackType.RING_STATIONARY:
-			launch_stationary_ring()
-		AttackType.RING_AROUND_BOSS:
-			launch_boss_ring()
-		AttackType.RING_CHASE_PLAYER:
-			launch_chasing_ring()
-		AttackType.RING_EXPANDING:
-			launch_expanding_ring()
-	
-	# Animación de recuperación
-	#anim_player.play("attack_recovery")
+	# Elegir tiempo aleatorio entre 0.5 y 2.0 segundos
+	tiempo_maximo_deambulacion = randf_range(0.5, 2.0)
+	tiempo_restante_deambulacion = tiempo_maximo_deambulacion
 
-# ===== DIFERENTES TIPOS DE ATAQUE DE ARO =====
+func elegir_direccion_aleatoria() -> Vector2:
+	var direcciones = direcciones_deambulacion.duplicate()
+	direcciones.shuffle()
+	return direcciones[0]
 
-# Aro estático en una posición
-func launch_stationary_ring():
-	var target_pos = player.global_position if player else global_position
-	spawn_fire_ring(target_pos, FireRingController.RingMode.STATIONARY)
-
-# Aro que gira alrededor del jefe
-func launch_boss_ring():
-	spawn_fire_ring(global_position, FireRingController.RingMode.FOLLOW_BOSS, self)
-
-# Aro que persigue al jugador
-func launch_chasing_ring():
-	if player:
-		spawn_fire_ring(player.global_position, FireRingController.RingMode.FOLLOW_PLAYER, player)
-
-# Aro que se expande desde el jefe
-func launch_expanding_ring():
-	spawn_fire_ring(global_position, FireRingController.RingMode.EXPANDING)
-
-# ===== MÉTODO PRINCIPAL PARA CREAR AROS =====
-
-func spawn_fire_ring(position: Vector2, mode: int, target: Node2D = null):
-	if not fire_ring_scene:
+func _physics_process(delta: float) -> void:
+	if muerto:
 		return
 	
-	var fire_ring = fire_ring_scene.instantiate()
-	get_parent().add_child(fire_ring)
+	# Actualizar temporizador de ataque
+	if not puede_atacar:
+		tiempo_desde_ultimo_ataque += delta
+		if tiempo_desde_ultimo_ataque >= cadencia_ataque:
+			puede_atacar = true
 	
-	# Configurar el aro
-	fire_ring.global_position = position
-	
-	# Pasar parámetros específicos
-	if fire_ring.has_method("setup_ring"):
-		fire_ring.setup_ring(position, mode, target)
-	
-	# Ajustar parámetros según el modo
-	match mode:
-		FireRingController.RingMode.EXPANDING:
-			fire_ring.expand_speed = 80.0
-			fire_ring.max_radius = 300.0
-		FireRingController.RingMode.FOLLOW_PLAYER:
-			fire_ring.rotation_speed = 220.0
-	
-	# Efecto de sonido
-	play_fire_ring_sound()
-
-# ===== CONTROL DE ATAQUES =====
-
-func stop_attacks():
-	can_attack = false
-	attack_timer.stop()
-
-func resume_attacks():
-	can_attack = true
-	attack_timer.start()
-
-func cycle_attack_pattern():
-	# Cambiar entre diferentes tipos de ataque
-	current_attack = (current_attack + 1) % AttackType.size()
-	print("Cambiando a patrón de ataque: ", current_attack)
-
-# ===== EFECTOS Y SONIDOS =====
-
-func play_fire_ring_sound():
-	var sound = $FireRingSound
-	if sound:
-		sound.pitch_scale = randf_range(0.9, 1.1)
-		sound.play()
-
-# ===== INTEGRACIÓN CON PLATAFORMAS 2D =====
-
-func _physics_process(delta):
-	# Movimiento básico del jefe (opcional)
-	handle_movement(delta)
-	
-	# Seguimiento del jugador
-	if player and is_instance_valid(player):
-		look_at_player()
-
-func look_at_player():
-	var direction = player.global_position - global_position
-	if direction.x > 0:
-		$Sprite2D.flip_h = false
-	else:
-		$Sprite2D.flip_h = true
-
-func handle_movement(delta):
-	# Ejemplo: Movimiento entre plataformas
-	velocity.y += 980 * delta  # Gravedad
-	
-	var move_direction = 0
-	if player and is_instance_valid(player):
-		var distance = player.global_position.x - global_position.x
-		if abs(distance) > 100:  # Mantener distancia
-			move_direction = sign(distance)
-	
-	velocity.x = move_direction * 100
+	aplicar_gravedad(delta)
+	manejar_estado(delta)
 	move_and_slide()
+	actualizar_direccion_sprite()
 
-# ===== VIDA Y DAÑO =====
-@export var health: int = 100
+func aplicar_gravedad(delta: float) -> void:
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	else:
+		velocity.y = 0
 
-func take_damage(amount: int):
-	health -= amount
-	if health <= 0:
-		defeat()
+func manejar_estado(delta: float) -> void:
+	match estado_actual:
+		Estado.DEAMBULANDO:
+			movimiento_deambulando(delta)
+		Estado.PERSEGUIR:
+			perseguir_jugador(delta)
+		Estado.PREPARAR_ATAQUE:
+			preparar_ataque(delta)
+		Estado.ATACAR:
+			realizar_ataque_distancia()
+		Estado.MUERTO:
+			# Comportamiento de muerte
+			pass
 
-func defeat():
-	stop_attacks()
-	#anim_player.play("death")
-	#await anim_player.animation_finished
+func movimiento_deambulando(delta: float) -> void:
+	# Reducir el timer
+	tiempo_restante_deambulacion -= delta
+	
+	# Si se acabó el tiempo, cambiar dirección
+	if tiempo_restante_deambulacion <= 0:
+		reiniciar_timer_deambulacion()
+	
+	# Mover en la dirección actual
+	velocity.x = direccion.x * VELOCIDAD_NORMAL
+	
+	# Verificar si hay jugador cerca para perseguir
+	if jugador_ref and puede_perseguir():
+		estado_actual = Estado.PERSEGUIR
+		return
+	
+	# Animación
+	if abs(velocity.x) > 1.0:
+		sprite.play("Idleboss")
+	else:
+		sprite.play("Idleboss")
+
+func puede_perseguir() -> bool:
+	if not jugador_ref:
+		return false
+	
+	var distancia = global_position.distance_to(jugador_ref.global_position)
+	return distancia <= DISTANCIA_PERSECUCION
+
+func perseguir_jugador(delta: float) -> void:
+	if not jugador_ref:
+		estado_actual = Estado.DEAMBULANDO
+		reiniciar_timer_deambulacion()
+		return
+	
+	var distancia_al_jugador = global_position.distance_to(jugador_ref.global_position)
+	
+	# Si el jugador está muy lejos, dejar de perseguir
+	if distancia_al_jugador > DISTANCIA_PERSECUCION:
+		jugador_ref = null
+		estado_actual = Estado.DEAMBULANDO
+		reiniciar_timer_deambulacion()
+		return
+	
+	# Si está en rango de ataque, preparar ataque
+	if distancia_al_jugador <= DISTANCIA_ATAQUE and puede_atacar:
+		estado_actual = Estado.PREPARAR_ATAQUE
+		velocity.x = 0
+		return
+	
+	# Seguir al jugador
+	var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
+	velocity.x = direccion_hacia_jugador.x * VELOCIDAD_PERSECUCION
+	
+	# Actualizar orientación
+	actualizar_orientacion(direccion_hacia_jugador.x)
+	
+	# Animación de persecución
+	sprite.play("correr")
+
+func preparar_ataque(delta: float) -> void:
+	# Detenerse y preparar ataque
+	velocity.x = 0
+	
+	# Mirar al jugador
+	if jugador_ref:
+		var direccion_hacia_jugador = (jugador_ref.global_position - global_position).normalized()
+		actualizar_orientacion(direccion_hacia_jugador.x)
+	
+	# Animación de preparación
+	sprite.play("preparar_ataque")
+	
+	# Después de un breve tiempo, atacar
+	await get_tree().create_timer(0.5).timeout
+	
+	if estado_actual == Estado.PREPARAR_ATAQUE and jugador_ref:
+		lanzar_proyectil()
+		estado_actual = Estado.ATACAR
+
+func lanzar_proyectil() -> void:
+	if not proyectil_scene or not jugador_ref:
+		print("ERROR: No hay proyectil o jugador")
+		return
+	
+	# Crear el proyectil
+	var proyectil = proyectil_scene.instantiate()
+	get_parent().add_child(proyectil)
+	
+	# Posicionar en el punto de disparo
+	proyectil.global_position = fire_point.global_position
+	
+	# DEBUG: Mostrar posiciones
+	print("FirePoint position: ", fire_point.global_position)
+	print("Jugador position: ", jugador_ref.global_position)
+	
+	# Calcular dirección NORMALIZADA hacia el jugador
+	var direccion_ataque = (jugador_ref.global_position - fire_point.global_position).normalized()
+	print("Dirección calculada: ", direccion_ataque)
+	
+	# Configurar el proyectil
+	if proyectil.has_method("apuntar_al_jugador"):
+		proyectil.apuntar_al_jugador(fire_point.global_position, jugador_ref)
+		print("Usando apuntar_al_jugador()")
+	
+	elif proyectil.has_method("setup"):
+		# Asegúrate de pasar la dirección, no el ángulo
+		proyectil.setup(fire_point.global_position, direccion_ataque, jugador_ref)
+		print("Usando setup() con dirección")
+	
+	elif proyectil.has_method("set_direccion"):
+		proyectil.set_direccion(direccion_ataque)
+		print("Usando set_direccion()")
+	
+	# Configurar velocidad y daño
+	if proyectil.has_method("set_velocidad"):
+		proyectil.set_velocidad(velocidad_proyectil)
+	
+	if proyectil.has_method("set_daño"):
+		proyectil.set_daño(daño_ataque)
+	
+	# Animación
+	sprite.play("ataque")
+func realizar_ataque_distancia() -> void:
+	# Esperar a que termine la animación de ataque
+	if sprite.animation == "ataque" and sprite.is_playing():
+		return
+	
+	# Después de atacar, verificar qué hacer
+	if jugador_ref and puede_perseguir():
+		estado_actual = Estado.PERSEGUIR
+	else:
+		estado_actual = Estado.DEAMBULANDO
+		reiniciar_timer_deambulacion()
+
+func _on_animacion_finalizada() -> void:
+	match sprite.animation:
+		"ataque":
+			# Después del ataque, continuar
+			if estado_actual == Estado.ATACAR:
+				realizar_ataque_distancia()
+		"preparar_ataque":
+			# La preparación ya maneja el ataque, no hacer nada aquí
+			pass
+
+func _on_frame_cambiado() -> void:
+	# Mantener para ataques cuerpo a cuerpo si los mantienes
+	if estado_actual == Estado.ATACAR and sprite.animation == "ataque_cuerpo":
+		if sprite.frame == FRAME_IMPACTO_ATAQUE and not daño_aplicado_en_este_ataque:
+			procesar_impacto_cuerpo()
+
+func procesar_impacto_cuerpo() -> void:
+	for cuerpo in attack_hitbox.get_overlapping_bodies():
+		if cuerpo.is_in_group("player") and cuerpo.has_method("recibir_daño"):
+			cuerpo.recibir_daño(daño_ataque)
+			daño_aplicado_en_este_ataque = true
+
+func actualizar_orientacion(direccion_x: float) -> void:
+	if direccion_x == 0:
+		return
+	
+	sprite.flip_h = direccion_x > 0
+	
+	# Ajustar posición del fire_point según dirección
+	if fire_point:
+		fire_point.position.x = abs(fire_point.position.x) * (1 if direccion_x > 0 else -1)
+	
+	# Ajustar hitbox de ataque cuerpo a cuerpo
+	if attack_hitbox:
+		attack_hitbox.scale.x = -1 if direccion_x < 0 else 1
+
+func actualizar_direccion_sprite() -> void:
+	if estado_actual != Estado.DEAMBULANDO or velocity.x == 0:
+		return
+	
+	sprite.flip_h = velocity.x > 0
+	
+	# Ajustar fire_point durante deambulación
+	if fire_point:
+		fire_point.position.x = abs(fire_point.position.x) * (1 if velocity.x > 0 else -1)
+
+func recibir_daño(cantidad: int) -> void:
+	if muerto:
+		return
+	
+	vida -= cantidad
+	print("Enemigo recibió ", cantidad, " de daño. Vida: ", vida)
+	
+	# Efecto visual de daño
+	efecto_daño()
+	
+	# Interrumpir ataque si está atacando
+	if estado_actual == Estado.PREPARAR_ATAQUE or estado_actual == Estado.ATACAR:
+		estado_actual = Estado.PERSEGUIR
+	
+	if vida <= 0:
+		morir()
+
+func efecto_daño() -> void:
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.1).timeout
+	sprite.modulate = Color.WHITE
+
+func morir() -> void:
+	muerto = true
+	estado_actual = Estado.MUERTO
+	velocity = Vector2.ZERO
+	set_collision_layer_value(1, false)
+	set_collision_mask_value(1, false)
+	sprite.play("muerte")
+	
+	await get_tree().create_timer(1.0).timeout
 	queue_free()
+
+func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+	# Esto es para ataques cuerpo a cuerpo
+	if body.is_in_group("player") and estado_actual == Estado.PERSEGUIR:
+		# Cambiar a ataque cuerpo a cuerpo si está muy cerca
+		estado_actual = Estado.ATACAR
+		sprite.play("ataque_cuerpo")
+		daño_aplicado_en_este_ataque = false
+
+func _on_player_detected(body: Node2D) -> void:
+	if body.is_in_group("player") and not muerto:
+		jugador_ref = body
+		if puede_perseguir():
+			estado_actual = Estado.PERSEGUIR
+		print("¡Jugador detectado!")
+
+func _on_player_lost(body: Node2D) -> void:
+	if body == jugador_ref:
+		jugador_ref = null
+		estado_actual = Estado.DEAMBULANDO
+		reiniciar_timer_deambulacion()
+		print("Jugador perdido")

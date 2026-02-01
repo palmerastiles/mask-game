@@ -5,5 +5,7 @@
 
 [node name="Node2D" type="Node2D" unique_id=389068533]
 script = ExtResource("1_lm3un")
+fireball_scene = ExtResource("2_hn6hq")
 
 [node name="Area2D" parent="." unique_id=1589586688 instance=ExtResource("2_hn6hq")]
+position = Vector2(256, 0)

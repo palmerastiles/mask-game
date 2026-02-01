@@ -14,7 +14,7 @@ var fireballs: Array = []
 var is_active: bool = true
 var current_radius: float
 
-# Definir el enum dentro de la clase
+# Definir el enum
 enum RingMode {
 	STATIONARY = 0,      # Gira en su lugar
 	FOLLOW_BOSS = 1,     # Sigue al jefe
@@ -37,6 +37,7 @@ func setup_ring(center_pos: Vector2, ring_mode: RingMode, ring_target: Node2D = 
 	global_position = center_pos
 	mode = ring_mode
 	target = ring_target
+	print("Anillo configurado en {center_pos}, modo: {ring_mode}")
 
 func spawn_fireball_ring():
 	if not fireball_scene:
@@ -47,7 +48,7 @@ func spawn_fireball_ring():
 	
 	for i in range(number_of_fireballs):
 		var fireball = fireball_scene.instantiate()
-		get_parent().add_child(fireball)
+		get_parent().add_child.call_deferred(fireball)
 		
 		# Configurar ángulo inicial
 		var start_angle = angle_step * i
@@ -56,15 +57,13 @@ func spawn_fireball_ring():
 		if fireball.has_method("setup"):
 			fireball.setup(global_position, start_angle, 
 						  target if mode == RingMode.FOLLOW_PLAYER else null)
+			print("Fireball {i} creado en ángulo {rad_to_deg(start_angle)}°")
 		
 		if fireball.has_method("set_orbit_radius"):
 			fireball.set_orbit_radius(current_radius)
 		
 		if fireball.has_method("set_rotation_speed"):
 			fireball.set_rotation_speed(rotation_speed)
-		
-		if fireball.has_method("set_fire_effect"):
-			fireball.set_fire_effect(1.0 + i * 0.1)  # Variación visual
 		
 		fireballs.append(fireball)
 
@@ -104,6 +103,7 @@ func destroy_ring():
 			fireball.queue_free()
 	fireballs.clear()
 	queue_free()
+	print("Anillo destruido")
 
 # Métodos para modificar el aro en tiempo real
 func change_target(new_target: Node2D):

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cxbdmp8cnr33"]
 
 [ext_resource type="Script" uid="uid://bvh3o26wpsmyi" path="res://Codigo/bola_de_fuego.gd" id="1_e53ku"]
-[ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_8eqd4"]
+[ext_resource type="Texture2D" uid="uid://dynhgd683n5u7" path="res://Assets/boss 3 iddle/boss 3 ataque.png" id="2_8eqd4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8eqd4"]
 radius = 72.0
@@ -10,6 +10,7 @@ radius = 72.0
 script = ExtResource("1_e53ku")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1183888878]
+scale = Vector2(0.14986737, 0.14986737)
 texture = ExtResource("2_8eqd4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1047620031]

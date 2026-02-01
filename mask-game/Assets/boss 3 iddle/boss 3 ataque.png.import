@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byn6x7g30fukv"
-path="res://.godot/imported/sprite_npc_caminar2.png-dbbf587e1da18842bc6f4240759f56dd.ctex"
+uid="uid://dynhgd683n5u7"
+path="res://.godot/imported/boss 3 ataque.png-db032b4bbd550cc8bec0d42155285f6b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/anim npc/npc caminata/sprite_npc_caminar2.png"
-dest_files=["res://.godot/imported/sprite_npc_caminar2.png-dbbf587e1da18842bc6f4240759f56dd.ctex"]
+source_file="res://Assets/boss 3 iddle/boss 3 ataque.png"
+dest_files=["res://.godot/imported/boss 3 ataque.png-db032b4bbd550cc8bec0d42155285f6b.ctex"]
 
 [params]
 
