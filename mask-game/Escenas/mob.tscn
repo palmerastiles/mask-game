@@ -1,19 +1,19 @@
 [gd_scene format=3 uid="uid://btcivpgnfaqdn"]
 
 [ext_resource type="Script" uid="uid://dgeif5a86vkkt" path="res://Codigo/Mob.gd" id="1_v6f7r"]
-[ext_resource type="Texture2D" uid="uid://calbsxekqgsdo" path="res://Assets/npc ataque lanza/sprite_npc_ataque0.png" id="1_xx0qd"]
-[ext_resource type="Texture2D" uid="uid://jnyx6xf7wcwl" path="res://Assets/npc ataque lanza/sprite_npc_ataque1.png" id="2_v6f7r"]
-[ext_resource type="Texture2D" uid="uid://b75h0nwdwakr5" path="res://Assets/npc ataque lanza/sprite_npc_ataque2.png" id="3_unnbp"]
-[ext_resource type="Texture2D" uid="uid://c841jgi5blu6y" path="res://Assets/npc ataque lanza/sprite_npc_ataque3.png" id="4_vgwtf"]
-[ext_resource type="Texture2D" uid="uid://kjibx7p1vyjr" path="res://Assets/npc ataque lanza/sprite_npc_ataque4.png" id="5_g6esx"]
-[ext_resource type="Texture2D" uid="uid://cyiquqa6xc3to" path="res://Assets/npc caminata/sprite_npc_caminar0.png" id="6_gyfq5"]
-[ext_resource type="Texture2D" uid="uid://cis1tgs18ne14" path="res://Assets/npc caminata/sprite_npc_caminar1.png" id="7_ttsdk"]
-[ext_resource type="Texture2D" uid="uid://byn6x7g30fukv" path="res://Assets/npc caminata/sprite_npc_caminar2.png" id="8_86htk"]
-[ext_resource type="Texture2D" uid="uid://c7q431dfpnoqw" path="res://Assets/npc caminata/sprite_npc_caminar3.png" id="9_lgql4"]
-[ext_resource type="Texture2D" uid="uid://do3vqcj7gn6x8" path="res://Assets/npc correr/sprite_npc_correr0.png" id="10_acft1"]
-[ext_resource type="Texture2D" uid="uid://bsbge6w2kk44s" path="res://Assets/npc correr/sprite_npc_correr1.png" id="11_1f5pg"]
-[ext_resource type="Texture2D" uid="uid://3r80blre8j1r" path="res://Assets/npc correr/sprite_npc_correr2.png" id="12_u0c26"]
-[ext_resource type="Texture2D" uid="uid://bml82liot80l1" path="res://Assets/npc correr/sprite_npc_correr3.png" id="13_kcwd7"]
+[ext_resource type="Texture2D" uid="uid://calbsxekqgsdo" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque0.png" id="1_xx0qd"]
+[ext_resource type="Texture2D" uid="uid://jnyx6xf7wcwl" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque1.png" id="2_v6f7r"]
+[ext_resource type="Texture2D" uid="uid://b75h0nwdwakr5" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque2.png" id="3_unnbp"]
+[ext_resource type="Texture2D" uid="uid://c841jgi5blu6y" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque3.png" id="4_vgwtf"]
+[ext_resource type="Texture2D" uid="uid://kjibx7p1vyjr" path="res://Assets/anim npc/npc ataque lanza/sprite_npc_ataque4.png" id="5_g6esx"]
+[ext_resource type="Texture2D" uid="uid://cyiquqa6xc3to" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar0.png" id="6_gyfq5"]
+[ext_resource type="Texture2D" uid="uid://cis1tgs18ne14" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar1.png" id="7_ttsdk"]
+[ext_resource type="Texture2D" uid="uid://byn6x7g30fukv" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar2.png" id="8_86htk"]
+[ext_resource type="Texture2D" uid="uid://c7q431dfpnoqw" path="res://Assets/anim npc/npc caminata/sprite_npc_caminar3.png" id="9_lgql4"]
+[ext_resource type="Texture2D" uid="uid://do3vqcj7gn6x8" path="res://Assets/anim npc/npc correr/sprite_npc_correr0.png" id="10_acft1"]
+[ext_resource type="Texture2D" uid="uid://bsbge6w2kk44s" path="res://Assets/anim npc/npc correr/sprite_npc_correr1.png" id="11_1f5pg"]
+[ext_resource type="Texture2D" uid="uid://3r80blre8j1r" path="res://Assets/anim npc/npc correr/sprite_npc_correr2.png" id="12_u0c26"]
+[ext_resource type="Texture2D" uid="uid://bml82liot80l1" path="res://Assets/anim npc/npc correr/sprite_npc_correr3.png" id="13_kcwd7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wkxbj"]
 animations = [{
@@ -73,8 +73,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3c6bj"]
-radius = 32.0
-height = 112.0
+radius = 17.0
+height = 84.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pxqvm"]
 radius = 301.02658
@@ -83,8 +83,8 @@ radius = 301.02658
 size = Vector2(50.375, 5)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k5pfw"]
-radius = 36.0
-height = 122.0
+radius = 18.0
+height = 84.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1751731663]
 script = ExtResource("1_v6f7r")
@@ -96,11 +96,13 @@ sprite_frames = SubResource("SpriteFrames_wkxbj")
 animation = &"ataque"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032423149]
+position = Vector2(-14, -2)
 shape = SubResource("CapsuleShape2D_3c6bj")
 
 [node name="PlayerDetectionZone" type="Area2D" parent="." unique_id=551112828]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionZone" unique_id=1610556335]
+position = Vector2(-16, 0)
 shape = SubResource("CircleShape2D_pxqvm")
 
 [node name="DirectionTimer" type="Timer" parent="." unique_id=1740676594]
@@ -115,7 +117,7 @@ shape = SubResource("RectangleShape2D_pxqvm")
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1219108259]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1794919385]
-position = Vector2(0, -2)
+position = Vector2(-15, -1)
 shape = SubResource("CapsuleShape2D_k5pfw")
 
 [node name="AttackCooldown" type="Timer" parent="." unique_id=1923167955]
