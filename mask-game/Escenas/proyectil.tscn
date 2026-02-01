@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://clhuhtw2c7uyx"]
+
+[ext_resource type="Script" uid="uid://dagtk4f22b0lc" path="res://Codigo/proyectil giratorio.gd" id="1_lm3un"]
+[ext_resource type="PackedScene" uid="uid://cxbdmp8cnr33" path="res://Escenas/Bola de fuego.tscn" id="2_hn6hq"]
+
+[node name="Node2D" type="Node2D" unique_id=389068533]
+script = ExtResource("1_lm3un")
+
+[node name="Area2D" parent="." unique_id=1589586688 instance=ExtResource("2_hn6hq")]

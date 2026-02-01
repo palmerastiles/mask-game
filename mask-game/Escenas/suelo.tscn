@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://6qja6jmqhdrh"]
 
-[ext_resource type="PackedScene" uid="uid://bh75w4yi3nwny" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
+[ext_resource type="PackedScene" uid="uid://bvoudkk742e0b" path="res://Escenas/Jugador.tscn" id="1_qdjju"]
+[ext_resource type="PackedScene" uid="uid://cy640eotc0fln" path="res://Escenas/jefe3.tscn" id="2_6pcy2"]
 [ext_resource type="Texture2D" uid="uid://boq8f1d83rej3" path="res://icon.svg" id="2_xq07r"]
 [ext_resource type="PackedScene" uid="uid://btcivpgnfaqdn" path="res://Escenas/mob.tscn" id="4_6pcy2"]
 [ext_resource type="PackedScene" path="res://Escenas/objeto_mascara.tscn" id="4_8guyl"]
-[ext_resource type="Script" uid="uid://dgeif5a86vkkt" path="res://Codigo/Mob.gd" id="5_6pcy2"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hy3li"]
 
@@ -17,7 +17,10 @@ position = Vector2(606, 639)
 shape = SubResource("WorldBoundaryShape2D_hy3li")
 
 [node name="Jugador" parent="." unique_id=1676021811 instance=ExtResource("1_qdjju")]
-position = Vector2(345, 553)
+position = Vector2(354, 513)
+
+[node name="Node2D" parent="Jugador" unique_id=680482132 instance=ExtResource("2_6pcy2")]
+position = Vector2(1036, -466)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=35438205]
 position = Vector2(463, 693)
@@ -30,4 +33,3 @@ mascara_a_desbloquear = 1
 
 [node name="CharacterBody2D2" parent="." unique_id=1751731663 instance=ExtResource("4_6pcy2")]
 position = Vector2(-122, 482)
-script = ExtResource("5_6pcy2")
