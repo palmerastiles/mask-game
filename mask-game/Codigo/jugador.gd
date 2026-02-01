@@ -6,6 +6,13 @@ enum Estado {
 	Burla,
 	Dios 
 }
+
+#Variables para Secuencia de Ataque
+var esta_atacando = false
+var enemigos_en_rango = [] # (Puede atacar varios enemigos a la vez)
+@onready var atack_hitbox = $Area2D # Referencia al Area2D de la imagen
+
+
 signal health_changed #Señal para el addon de barra de vida
 var Actual = Estado.Sacrificio
 var Desbloqueada = [Estado.Sacrificio]

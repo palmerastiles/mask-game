@@ -19,10 +19,9 @@ var estado_actual = Estado.DEAMBULANDO
 
 # Variables de daño y ataque
 var muerto: bool = false
-var recibeDaño: bool = false
 var daño = 10
-var realizandoDaño1: bool = false
-var puede_atacar: bool = true
+var Atacando: bool = false
+var daño_aplicado_en_este_ataque = false
 
 # Variables de movimiento
 var direccion: Vector2 = Vector2.RIGHT
@@ -96,19 +95,40 @@ func perseguir_jugador():
 
 
 func realizar_ataque():
-	# Detener movimiento para atacar
 	velocity.x = 0
-	
-	# Aquí implementas la lógica de ataque
-	if jugador_ref_atack_hit:
-		print("Atacando al jugador!")
+	print("Atacando?", Atacando)
+	print("Daño",daño_aplicado_en_este_ataque)
+	if not Atacando: # Usamos tu variable para saber si ya empezó la animación
+		daño_aplicado_en_este_ataque = false
 		sprite.play("ataque")
-		# Dañar al jugador si está en rango
-		#Aqui habia un if de distancia
-		jugador_ref.recibir_daño(daño)
-	# Después de atacar, volver a perseguir
-	#estado_actual = Estado.PERSEGUIR
+		Atacando = true
+		# Esperamos a que la animación termine para volver a perseguir
+		await sprite.animation_finished
+		
+		Atacando = false
+		estado_actual = Estado.PERSEGUIR #probar bien
 
+# SECUENCIA DE ATAQUE
+# Señal que se activa cuando la animacion de ataque este completa.
+func _on_animated_sprite_2d_frame_changed() -> void:
+	if estado_actual == Estado.ATACAR and sprite.animation == "ataque": # tmb debe estar atacando
+		
+		var frame_de_impacto = 4 #Lanza completamente estirada
+		
+		#If para evitar que se efectue daño continuamente
+		if sprite.frame == frame_de_impacto and not daño_aplicado_en_este_ataque: 
+			print("ENTRO")
+			verificar_impacto_actual()
+
+func verificar_impacto_actual():
+	# Comprobamos si el jugador sigue dentro de la hitbox de ataque
+	var cuerpos_en_rango = $AttackHitbox.get_overlapping_bodies() 
+	
+	for cuerpo in cuerpos_en_rango:
+		if cuerpo.is_in_group("player"):
+			cuerpo.recibir_daño(daño)
+			daño_aplicado_en_este_ataque = true # Evita doble daño en el mismo golpe
+			print("¡El enemigo te ha golpeado en el frame ", sprite.frame, "!")
 
 func _on_direction_timer_timeout():
 	if estado_actual == Estado.DEAMBULANDO and not muerto:

@@ -127,23 +127,19 @@ animation = &"Correr"
 speed_scale = 0.7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1175427664]
-visible = false
 position = Vector2(2, -3)
 shape = SubResource("CapsuleShape2D_8g85c")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1557022389]
-visible = false
 position = Vector2(87, -2)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1466632862]
-visible = false
+[node name="AtackHitbox" type="CollisionShape2D" parent="Area2D" unique_id=1466632862]
 position = Vector2(-30, 12)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_43k7d")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2136185713]
-visible = false
 
 [node name="CanvasLayer" parent="Camera2D" unique_id=1909854209 instance=ExtResource("21_5d76g")]
 
